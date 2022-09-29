@@ -1,0 +1,186 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.tl</groupId>
+	<artifactId>pms</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>pms</name>
+	<description>天利管理项目</description>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.4</version>
+		<relativePath/> 
+	</parent>
+	
+	<modules>
+		<module>pms-common</module>
+		<module>pms-authorization-server</module>
+		<module>pms-admin</module>
+		<module>pms-security</module>
+	</modules>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>11</java.version>
+		<pms.version>0.0.1-SNAPSHOT</pms.version>
+		<hutool.version>5.8.0</hutool.version>
+        <mysql.connector.java>8.0.15</mysql.connector.java>
+        <com.alibaba.druid>1.2.9</com.alibaba.druid>
+        <lombok.version>1.18.4</lombok.version>
+        <org.mybatis.spring.boot>2.0.1</org.mybatis.spring.boot>
+        <mybatis-plus.version>3.5.1</mybatis-plus.version>
+        <mybatis.version>2.1.2</mybatis.version>
+        <springfox-swagger.version>3.0.0</springfox-swagger.version>
+        <swagger-models.version>1.6.0</swagger-models.version>
+        <swagger-annotations.version>1.6.0</swagger-annotations.version>
+        <logstash-logback.version>7.2</logstash-logback.version>
+        <jjwt.version>0.9.1</jjwt.version>
+        <knife4j.version>2.0.7</knife4j.version>
+        <oauth2.version>0.3.0</oauth2.version>
+        <dingtalk.sdk.version>1.4.40</dingtalk.sdk.version>
+        <dingtalk.service.version>2.0.0</dingtalk.service.version>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+	</dependencies>
+	
+	<dependencyManagement>
+        <dependencies>
+        	<!-- pms-common -->
+	        <dependency>
+	            <groupId>com.pms.common</groupId>
+	  			<artifactId>pms-common</artifactId>
+	            <version>${pms.version}</version>
+	        </dependency>
+	        <!-- 钉钉sdk -->
+	        <dependency>
+				 <groupId>com.aliyun</groupId>
+				 <artifactId>dingtalk</artifactId>
+				 <version>${dingtalk.sdk.version}</version>
+			</dependency>
+			<dependency>
+	            <groupId>com.aliyun</groupId>
+	            <artifactId>alibaba-dingtalk-service-sdk</artifactId>
+	            <version>${dingtalk.service.version}</version>
+	        </dependency>
+	        <!-- security安全模块-->
+	        <dependency>
+	        	<groupId>com.pms.security</groupId>
+  				<artifactId>pms-security</artifactId>
+	  			<version>${pms.version}</version>
+	        </dependency>
+        	<!-- 集成 OAuth2 授权服务器依赖 -->
+			<dependency>
+			    <groupId>org.springframework.security</groupId>
+			    <artifactId>spring-security-oauth2-authorization-server</artifactId>
+			    <version>${oauth2.version}</version>
+			</dependency>
+			<!--JWT(Json Web Token)登录支持-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <!-- hutool 工具类 -->
+	        <dependency>
+			    <groupId>cn.hutool</groupId>
+			    <artifactId>hutool-all</artifactId>
+			    <version>${hutool.version}</version>
+			</dependency>
+			<!-- lombok -->
+			<dependency>
+			   <groupId>org.projectlombok</groupId>
+			   <artifactId>lombok</artifactId>
+			   <version>${lombok.version}</version>
+			   <scope>provided</scope>
+			</dependency>
+            <!-- mysql -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.connector.java}</version>
+            </dependency>
+            <!--myabtis-->
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+			    <artifactId>mybatis-spring-boot-starter</artifactId>
+			    <version>${mybatis.version}</version>
+			</dependency>
+            <!--mybatis-plus 相关依赖-->
+		    <dependency>
+		        <groupId>com.baomidou</groupId>
+		        <artifactId>mybatis-plus-boot-starter</artifactId>
+		        <version>${mybatis-plus.version}</version>
+		    </dependency>
+            <!-- 德鲁伊连接池 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${com.alibaba.druid}</version>
+            </dependency>
+            <!--Swagger-UI API文档生产工具-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${springfox-swagger.version}</version>
+            </dependency>
+            <!-- 自定义api接口文档 -->
+            <dependency>
+				<groupId>com.github.xiaoymin</groupId>
+				<artifactId>knife4j-spring-boot-starter</artifactId>
+				<version>${knife4j.version}</version>
+			</dependency>
+            <!--解决Swagger访问主页时的NumberFormatException问题-->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>${swagger-models.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-annotations.version}</version>
+            </dependency>
+             <!--集成logstash 实现日志输出json格式化 -->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback.version}</version>
+            </dependency>
+			
+        </dependencies>
+    </dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+  
+</project>

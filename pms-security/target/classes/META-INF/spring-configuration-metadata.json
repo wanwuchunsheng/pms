@@ -1,0 +1,46 @@
+{
+  "groups": [
+    {
+      "name": "jwt",
+      "type": "com.pms.security.config.utils.JwtProperties",
+      "sourceType": "com.pms.security.config.utils.JwtProperties"
+    },
+    {
+      "name": "jwt.cert-info",
+      "type": "com.pms.security.config.utils.JwtProperties$CertInfo",
+      "sourceType": "com.pms.security.config.utils.JwtProperties",
+      "sourceMethod": "public com.pms.security.config.utils.JwtProperties.CertInfo getCertInfo() "
+    },
+    {
+      "name": "jwt.claims",
+      "type": "com.pms.security.config.utils.JwtProperties$Claims",
+      "sourceType": "com.pms.security.config.utils.JwtProperties",
+      "sourceMethod": "public com.pms.security.config.utils.JwtProperties.Claims getClaims() "
+    },
+    {
+      "name": "secure.ignored",
+      "type": "com.pms.security.config.common.IgnoreUrlsConfig",
+      "sourceType": "com.pms.security.config.common.IgnoreUrlsConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "jwt.cert-info.public-key-location",
+      "type": "java.lang.String",
+      "description": "证书存放位置",
+      "sourceType": "com.pms.security.config.utils.JwtProperties$CertInfo"
+    },
+    {
+      "name": "jwt.claims.issuer",
+      "type": "java.lang.String",
+      "description": "发证方",
+      "sourceType": "com.pms.security.config.utils.JwtProperties$Claims"
+    },
+    {
+      "name": "secure.ignored.urls",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.pms.security.config.common.IgnoreUrlsConfig"
+    }
+  ],
+  "hints": []
+}
