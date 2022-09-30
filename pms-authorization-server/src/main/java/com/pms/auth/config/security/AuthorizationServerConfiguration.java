@@ -56,7 +56,8 @@ public class AuthorizationServerConfiguration {
 	
 	/**
      * 授权配置	
-     * // @Order 表示加载优先级；HIGHEST_PRECEDENCE为最高优先级
+     * // @Order 表示加载优先级
+     *    HIGHEST_PRECEDENCE为最高优先级
      *
      * @param http
      * @return
@@ -168,6 +169,8 @@ public class AuthorizationServerConfiguration {
                 .redirectUri("http://127.0.0.1:8000")
                 // 授权范围（当前客户端的授权范围）
                 .scope(OidcScopes.OPENID)
+				.scope("message.read")
+				.scope("message.write")
                 // JWT（Json Web Token）配置项
                 .tokenSettings(tokenSettings)
                 // 客户端配置项

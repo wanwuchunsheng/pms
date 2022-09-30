@@ -1,14 +1,12 @@
 package com.pms.security.config.common;
 
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.pms.security.component.DynamicAccessDecisionManager;
-
 import com.pms.security.component.DynamicSecurityMetadataSource;
 
 /**
@@ -39,20 +37,11 @@ public class CommonSecurityConfig {
         return new RestAuthenticationEntryPoint();
     }
 
-    /**
-    @Bean
-    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(){
-        return new JwtAuthenticationTokenFilter();
-    }
-    */
-    
-    @ConditionalOnBean(name = "dynamicSecurityService")
     @Bean
     public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
         return new DynamicAccessDecisionManager();
     }
 
-    @ConditionalOnBean(name = "dynamicSecurityService")
     @Bean
     public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
         return new DynamicSecurityMetadataSource();
