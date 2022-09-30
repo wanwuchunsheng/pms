@@ -4,14 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
-import com.pms.security.component.DynamicSecurityFilter;
-import com.pms.security.component.DynamicSecurityService;
+import com.pms.security.component.DynamicAccessDecisionManager;
+import com.pms.security.component.DynamicSecurityMetadataSource;
 import com.pms.security.config.common.IgnoreUrlsConfig;
 import com.pms.security.config.common.RestAuthenticationEntryPoint;
 import com.pms.security.config.common.RestfulAccessDeniedHandler;
@@ -28,19 +30,18 @@ public class SecurityConfig {
 
     @Autowired
     private IgnoreUrlsConfig ignoreUrlsConfig;
+    
     @Autowired
     private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
+    
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
- 
-    /**
+    
     @Autowired
-    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
-    */
-    @Autowired(required = false)
-    private DynamicSecurityService dynamicSecurityService;
-    @Autowired(required = false)
-    private DynamicSecurityFilter dynamicSecurityFilter;
+    private DynamicSecurityMetadataSource dynamicSecurityService;
+    
+    @Autowired
+    private DynamicAccessDecisionManager dynamicAccessDecisionManager;
     
     
     @Bean
@@ -57,6 +58,15 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()
+                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+
+					@Override
+					public <O extends FilterSecurityInterceptor> O postProcess(O fsi) {
+						fsi.setSecurityMetadataSource(dynamicSecurityService);
+						fsi.setAccessDecisionManager(dynamicAccessDecisionManager);
+						return fsi;
+					}
+                })
                 // 关闭跨站请求防护及不使用session
                 .and()
                 .csrf()
@@ -70,17 +80,13 @@ public class SecurityConfig {
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
 			    // 除上面外的所有请求全部需要鉴权认证
 		        .and()
-		        // 资源服务JWT认证
+		        // 资源服务内部JWT认证
 		        .oauth2ResourceServer(resourceServer -> resourceServer
 		                .accessDeniedHandler(restfulAccessDeniedHandler)
 		                .authenticationEntryPoint(restAuthenticationEntryPoint)
 		                .jwt()
 		        );
-		        
-        //有动态权限配置时添加动态权限校验过滤器
-        if(dynamicSecurityService!=null){
-            registry.and().addFilterBefore(dynamicSecurityFilter, FilterSecurityInterceptor.class);
-        }
+        
         return httpSecurity.build();
     }
     

@@ -13,6 +13,7 @@ import java.util.*;
 
 /**
  * 动态权限数据源，用于获取动态权限规则
+ *  判断当前用户是否可以访问被保护资源的逻辑
  * @author WCH
  */
 public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {

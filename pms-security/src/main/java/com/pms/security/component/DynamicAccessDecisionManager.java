@@ -13,10 +13,16 @@ import java.util.Iterator;
 
 /**
  * 动态权限决策管理器，用于判断用户是否有访问权限
+ *   判断当前请求url是否受保护，过滤受保护的资源，进入下一个过滤器校验当前用户是否有访问受保护的资源
  * @author WCH
  */
 public class DynamicAccessDecisionManager implements AccessDecisionManager {
 
+	/*
+	 * @param 请求该保护资源的用户对象
+	 * @param 被调用的保护资源
+	 * @param 有权限调用该资源的角色集合
+	 */
     @Override
     public void decide(Authentication authentication, Object object,
                        Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
@@ -29,8 +35,9 @@ public class DynamicAccessDecisionManager implements AccessDecisionManager {
             ConfigAttribute configAttribute = iterator.next();
             //将访问所需资源或用户拥有资源进行比对
             String needAuthority = configAttribute.getAttribute();
-            for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
-                if (needAuthority.trim().equals(grantedAuthority.getAuthority())) {
+            for (GrantedAuthority ga : authentication.getAuthorities()) {
+                if (needAuthority.trim().equals(ga.getAuthority())) {
+                	//匹配到对应角色，则允许通过
                     return;
                 }
             }

@@ -2,6 +2,9 @@ package com.pms.security.component;
 
 import org.springframework.security.access.ConfigAttribute;
 
+import com.pms.security.pojo.UmsResource;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,4 +16,6 @@ public interface DynamicSecurityService {
      * 加载资源ANT通配符和资源对应MAP
      */
     Map<String, ConfigAttribute> loadDataSource();
+    
+    List<UmsResource> loadDataMenu();
 }

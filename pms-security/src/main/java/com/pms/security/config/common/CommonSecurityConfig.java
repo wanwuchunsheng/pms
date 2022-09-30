@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.pms.security.component.DynamicAccessDecisionManager;
-import com.pms.security.component.DynamicSecurityFilter;
+
 import com.pms.security.component.DynamicSecurityMetadataSource;
 
 /**
@@ -58,10 +58,6 @@ public class CommonSecurityConfig {
         return new DynamicSecurityMetadataSource();
     }
 
-    @ConditionalOnBean(name = "dynamicSecurityService")
-    @Bean
-    public DynamicSecurityFilter dynamicSecurityFilter(){
-        return new DynamicSecurityFilter();
-    }
+    
     
 }
