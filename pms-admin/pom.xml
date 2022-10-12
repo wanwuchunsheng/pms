@@ -12,14 +12,14 @@
   <dependencies>
   		<!-- pms-common -->
         <dependency>
-            <groupId>com.pms.common</groupId>
-  			<artifactId>pms-common</artifactId>
+             <groupId>com.pms.common</groupId>
+  			 <artifactId>pms-common</artifactId>
         </dependency>
         <!-- pms-sercurity -->
         <dependency>
-            <groupId>com.pms.security</groupId>
-  			<artifactId>pms-security</artifactId>
-        </dependency>
+			 <groupId>com.pms.security</groupId>
+			 <artifactId>pms-security</artifactId>
+		</dependency>
         <!-- dingtalk -->
         <dependency>
 			<groupId>com.aliyun</groupId>

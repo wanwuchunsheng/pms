@@ -41,7 +41,8 @@
             <artifactId>jjwt</artifactId>
         </dependency>
     </dependencies>
+    
     <build>
-        <finalName>pms-security</finalName>
+        <finalName>${project.artifactId}</finalName>
     </build>
 </project>

@@ -20,11 +20,24 @@
 		<module>pms-security</module>
 	</modules>
 	
+	<!-- 私服上传 -->
+  	<distributionManagement>
+		<repository>
+			<id>maven-releases</id>
+			<url>http://repo.windmagics.com/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>maven-snapshots</id>
+			<url>http://repo.windmagics.com/repository/maven-snapshots/</url>
+		</snapshotRepository>
+  	</distributionManagement>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>11</java.version>
 		<pms.version>0.0.1-SNAPSHOT</pms.version>
+		<pms.security.version>0.0.1-20221012.065625-1</pms.security.version>
 		<hutool.version>5.8.0</hutool.version>
         <mysql.connector.java>8.0.15</mysql.connector.java>
         <com.alibaba.druid>1.2.9</com.alibaba.druid>
@@ -75,6 +88,12 @@
 	  			<artifactId>pms-common</artifactId>
 	            <version>${pms.version}</version>
 	        </dependency>
+	        <!-- security安全模块 -->
+	        <dependency>
+	        	<groupId>com.pms.security</groupId>
+  				<artifactId>pms-security</artifactId>
+	  			<version>${pms.version}</version>
+	        </dependency>
 	        <!-- 钉钉sdk -->
 	        <dependency>
 				 <groupId>com.aliyun</groupId>
@@ -85,12 +104,6 @@
 	            <groupId>com.aliyun</groupId>
 	            <artifactId>alibaba-dingtalk-service-sdk</artifactId>
 	            <version>${dingtalk.service.version}</version>
-	        </dependency>
-	        <!-- security安全模块-->
-	        <dependency>
-	        	<groupId>com.pms.security</groupId>
-  				<artifactId>pms-security</artifactId>
-	  			<version>${pms.version}</version>
 	        </dependency>
         	<!-- 集成 OAuth2 授权服务器依赖 -->
 			<dependency>
@@ -173,5 +186,4 @@
 			
         </dependencies>
     </dependencyManagement>
-
 </project>

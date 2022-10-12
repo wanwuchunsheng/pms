@@ -41,7 +41,7 @@ public class SysUserInfoServiceImpl implements ISysUserInfoService{
 	private SysUserRoleDao sysUserRoleDao;
 	
 	@Autowired
-	 public PasswordEncoder passwordEncoder;
+	public PasswordEncoder passwordEncoder;
 
 	@Override
 	public Result<?> updateUserInfoByMobile(UserGetResponse dingtalkUser) {
