@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
+import com.pms.common.redis.IGlobalCache;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
  

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@MapperScan(basePackages = {"com.pms.admin.*.dao"})
+@MapperScan(basePackages = {"com.pms.admin.*.*.dao"})
 @ComponentScan(basePackages = {"com.pms"})
 public class AdminApplication {
 	

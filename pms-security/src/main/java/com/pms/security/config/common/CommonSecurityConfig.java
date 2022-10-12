@@ -6,8 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.pms.security.component.DynamicAccessDecisionManager;
-import com.pms.security.component.DynamicSecurityMetadataSource;
+import com.pms.security.component.DynamicSecurityAuthManager;
 
 /**
  * SpringSecurity通用配置
@@ -36,17 +35,12 @@ public class CommonSecurityConfig {
     public RestAuthenticationEntryPoint restAuthenticationEntryPoint() {
         return new RestAuthenticationEntryPoint();
     }
-
-    @Bean
-    public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
-        return new DynamicAccessDecisionManager();
-    }
-
-    @Bean
-    public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
-        return new DynamicSecurityMetadataSource();
-    }
-
     
+    
+    @Bean
+    public DynamicSecurityAuthManager dynamicSecurityAuthManager() {
+        return new DynamicSecurityAuthManager();
+    }
+  
     
 }

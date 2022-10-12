@@ -5,8 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pms.admin.modules.admin.dao.SysUserRoleDao;
 import com.pms.admin.modules.admin.service.IAdminService;
+import com.pms.admin.modules.admin.service.ISysUserInfoService;
 import com.pms.common.pojo.Result;
+import com.pms.common.pojo.SysUserInfo;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,6 +30,24 @@ public class AdminController {
 	
 	@Autowired
 	private IAdminService  adminService;
+	
+	@Autowired
+	private ISysUserInfoService  sysUserInfoService;
+	
+	
+	/**
+     * 获取access_token
+     * @return
+     */
+    @GetMapping("/login")
+    @ApiOperation(value = "授权码模式获取accessToken接口", notes = "授权码模式获取accessToken")
+    @ApiImplicitParams({
+        @ApiImplicitParam(paramType = "query", name = "code", value = "授权码", dataType = "String",required = true)
+    })
+    public Result<?> Login(String code){
+    	log.info("____code:{}",code);
+        return Result.success(code);
+    }
 
     /**
      * 获取access_token
@@ -60,9 +81,8 @@ public class AdminController {
     @ApiImplicitParams({
         @ApiImplicitParam(paramType = "query", name = "userId", value = "用户Id", dataType = "String")
     })
-    public Result<?> queryUserInfo(String userId){
-    	log.error("————————{}",userId);
-        return Result.success("查询用户信息成功");
+    public Result<?> queryUserInfoByUserId(String userId){
+        return sysUserInfoService.queryUserInfoByUserId(userId);
     }
     
 }

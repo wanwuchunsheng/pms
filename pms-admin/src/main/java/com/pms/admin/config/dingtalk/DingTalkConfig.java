@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.Getter;
-
+/**
+ * 钉钉相关配置
+ * @author WCH
+ * */
 @Component
 @Getter
 public class DingTalkConfig {

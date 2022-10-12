@@ -14,6 +14,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import com.pms.common.redis.IGlobalCache;
+
 import redis.clients.jedis.JedisPoolConfig;
  
 @EnableCaching

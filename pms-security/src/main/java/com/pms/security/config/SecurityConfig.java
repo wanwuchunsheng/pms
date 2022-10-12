@@ -4,16 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
-import com.pms.security.component.DynamicAccessDecisionManager;
-import com.pms.security.component.DynamicSecurityMetadataSource;
 import com.pms.security.config.common.IgnoreUrlsConfig;
 import com.pms.security.config.common.RestAuthenticationEntryPoint;
 import com.pms.security.config.common.RestfulAccessDeniedHandler;
@@ -24,8 +19,6 @@ import com.pms.security.config.common.RestfulAccessDeniedHandler;
  * Created by macro on 2019/11/5.
  */
 @Configuration
-//@EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
@@ -36,14 +29,7 @@ public class SecurityConfig {
     
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    
-    @Autowired
-    private DynamicSecurityMetadataSource dynamicSecurityService;
-    
-    @Autowired
-    private DynamicAccessDecisionManager dynamicAccessDecisionManager;
-    
-    
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity.authorizeRequests();
@@ -57,16 +43,8 @@ public class SecurityConfig {
         registry.and()
                 .authorizeRequests()
                 .anyRequest()
-                .authenticated()
-                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
-
-					@Override
-					public <O extends FilterSecurityInterceptor> O postProcess(O fsi) {
-						fsi.setSecurityMetadataSource(dynamicSecurityService);
-						fsi.setAccessDecisionManager(dynamicAccessDecisionManager);
-						return fsi;
-					}
-                })
+                //.authenticated()
+                .access("@dynamicSecurityAuthManager.canAccess(request,authentication)")
                 // 关闭跨站请求防护及不使用session
                 .and()
                 .csrf()

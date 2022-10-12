@@ -38,7 +38,7 @@
         <logstash-logback.version>7.2</logstash-logback.version>
         <jjwt.version>0.9.1</jjwt.version>
         <knife4j.version>2.0.7</knife4j.version>
-        <oauth2.version>0.3.0</oauth2.version>
+        <oauth2.version>0.3.1</oauth2.version>
         <dingtalk.sdk.version>1.4.40</dingtalk.sdk.version>
         <dingtalk.service.version>2.0.0</dingtalk.service.version>
 	</properties>
@@ -174,13 +174,4 @@
         </dependencies>
     </dependencyManagement>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-  
 </project>

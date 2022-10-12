@@ -1,20 +1,28 @@
 package com.pms.admin.modules.dingtalk.controller;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dingtalk.api.response.OapiV2UserGetResponse.UserGetResponse;
-import com.pms.admin.config.redis.IGlobalCache;
 import com.pms.admin.modules.admin.service.IAdminService;
+import com.pms.admin.modules.admin.service.ISysUserInfoService;
 import com.pms.admin.modules.dingtalk.service.IDingTalkService;
+import com.pms.common.constant.Constants;
 import com.pms.common.pojo.Result;
+import com.pms.common.pojo.SysResouce;
+import com.pms.common.pojo.SysUserInfo;
+import com.pms.common.pojo.User;
+import com.pms.common.redis.IGlobalCache;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,10 +42,13 @@ import lombok.extern.log4j.Log4j2;
 public class DingTalkController {
 	
 	@Autowired
-	private IDingTalkService  dingTalkService;
+	private IDingTalkService dingTalkService;
 	
 	@Autowired
-	private IAdminService  adminService;
+	private ISysUserInfoService sysUserInfoService;
+	
+	@Autowired
+	private IAdminService adminService;
 	
 	@Autowired
 	private IGlobalCache globalCache;
@@ -47,7 +58,8 @@ public class DingTalkController {
      * @param code 钉钉扫码返回的code
      * @return
      */
-    @GetMapping(value="/dingtalkCallback")
+    @SuppressWarnings("unchecked")
+	@GetMapping(value="/dingtalkCallback")
     @ApiOperation(value = "钉钉扫码登录接口", notes = "钉钉扫码登录")
     @ApiImplicitParams({
         @ApiImplicitParam(paramType = "query", name = "code", value = "钉钉临时授权码", dataType = "String",required = true)
@@ -68,27 +80,44 @@ public class DingTalkController {
         if(resUserInfo.getCode() != 200) {
     		return resUserId;
     	}
-        //4、获取本地授权服务器local_access_token
+        //4、用户表补全钉钉信息
+        UserGetResponse dingtalkUser = (UserGetResponse) resUserInfo.getData();
+        Result<?> resSysUserInfo = sysUserInfoService.updateUserInfoByMobile(dingtalkUser);
+        if(resSysUserInfo.getCode()!=200) {
+        	return resSysUserInfo;
+        }
+        //5、查询用户信息
+        SysUserInfo sui = sysUserInfoService.getAdminByUsername(dingtalkUser.getMobile(), dingtalkUser.getUserid());
+        if(ObjectUtil.isEmpty(sui)) {
+        	//注册用户
+        	sui = sysUserInfoService.saveUserInfo(dingtalkUser);
+        	//绑定默认角色
+        	sysUserInfoService.saveRole(sui);
+        }
+        //6、查询用户所有资源权限
+        List<SysResouce> resList = sysUserInfoService.getPermissionList(sui.getId());
+        //7、查询用户所有角色
+        List<com.pms.common.pojo.SysRole> roleList = sysUserInfoService.getRoleList(sui.getId());
+        //8、获取本地授权服务器local_access_token
         Result<?> resLocalAccessToken = adminService.getAuthAccessToken();
         if(resLocalAccessToken.getCode()!=200) {
         	return resLocalAccessToken;
         }
-        //5、本地token信息绑定钉钉登录信息
-        Map<String,Object> map = MapUtil.createMap(Map.class);
-        //钉钉用户对象
-        UserGetResponse dingtalkUser = (UserGetResponse) resUserInfo.getData();
-        //本地local_access_token对象
-        Map<String,Object> localMap = (Map<String, Object>) resLocalAccessToken.getData();
-        map.put("dingtalk_access_token", resAccessToken.getData());
-        map.put("access_token", localMap.get("access_token"));
-        map.put("email", dingtalkUser.getEmail());
-        map.put("mobile", dingtalkUser.getMobile());
-        map.put("name", dingtalkUser.getName());
-        map.put("userid", dingtalkUser.getUserid());
-        map.put("unionid", dingtalkUser.getUnionid());
-        //6、存入redis
-        globalCache.set(Convert.toStr(localMap.get("access_token")), map, 60*4);
-        return Result.success(map);
+        //9、封装返回信息
+		Map<String,Object> localMap = (Map<String, Object>) resLocalAccessToken.getData();
+		User user = new User();
+		BeanUtils.copyProperties(sui ,user );
+		user.setAccessToken(Convert.toStr(localMap.get("access_token")));
+		user.setDingtalkAccessToken(Convert.toStr(resAccessToken.getData()));
+		user.setDingtalkDeptId(Convert.toStr(dingtalkUser.getDeptIdList()));
+		user.setDingtalkUserId(dingtalkUser.getUserid());
+		user.setDingtalkUnionId(dingtalkUser.getUnionid());
+		//user.setResouceList(resList);
+		user.setRoleList(roleList);
+		user.setPermissionList(resList.stream().map(SysResouce::getResPath).collect(Collectors.toList()));
+        //10、存入redis
+        globalCache.set(Constants.JUSTAUTH+user.getAccessToken(), JSONUtil.parse(user) , Constants.REDIS_TOKEN_TIMEOUT);
+        return Result.success(user);
     }
 
 	

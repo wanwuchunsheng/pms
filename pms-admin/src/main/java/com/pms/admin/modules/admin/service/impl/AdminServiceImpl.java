@@ -16,12 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AdminServiceImpl implements IAdminService{
 	
-	/**
-     * 注入 JwtProperties 属性配置类
-     
-    @Autowired
-    private JwtProperties jwtProperties;
-*/
+	
 	/**
      * 获取access_token
      * @return
@@ -38,7 +33,7 @@ public class AdminServiceImpl implements IAdminService{
 				}
 			}
 		} catch (Exception e) {
-			log.error("结果转换异常",e.getMessage());
+			log.error("获取local_access_token失败,{}",e.getMessage());
 		}
 		return Result.failed("获取local_access_token失败");
 	}
@@ -59,7 +54,7 @@ public class AdminServiceImpl implements IAdminService{
 				}
 			}
 		} catch (Exception e) {
-			log.error("结果转换异常",e.getMessage());
+			log.error("注销access_token失败,{}",e.getMessage());
 		}
 		return Result.failed("注销access_token失败");
 	}

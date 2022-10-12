@@ -2,13 +2,13 @@ package com.pms.auth.modules.service;
 
 import java.util.List;
 
-import com.pms.common.pojo.UmsAdmin;
-import com.pms.common.pojo.UmsPermission;
+import com.pms.common.pojo.SysResouce;
+import com.pms.common.pojo.SysUserInfo;
 
 public interface UmsAdminService {
 
-	UmsAdmin getAdminByUsername(String username);
+	SysUserInfo getAdminByUsername(String username);
 
-	List<UmsPermission> getPermissionList(Long id);
+	List<SysResouce> getPermissionList(Long id);
 
 }

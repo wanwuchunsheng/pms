@@ -86,6 +86,7 @@ secure:
       - /favicon.ico
       - /actuator/**
       - /druid/**
+      - /admin/login
              
 #security jwt（校验jwt签名）
 jwt:

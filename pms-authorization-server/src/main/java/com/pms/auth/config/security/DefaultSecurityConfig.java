@@ -19,21 +19,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.OAuth2TokenType;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.pms.auth.config.redis.IGlobalCache;
 import com.pms.auth.modules.service.AdminUserDetails;
 import com.pms.auth.modules.service.UmsAdminService;
-import com.pms.common.pojo.UmsAdmin;
-import com.pms.common.pojo.UmsPermission;
+import com.pms.common.pojo.SysResouce;
+import com.pms.common.pojo.SysUserInfo;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>授权服务器安全策略</p>
@@ -43,6 +44,7 @@ import lombok.SneakyThrows;
  * @version 1.0
  */
 @EnableWebSecurity(debug = true)
+@Slf4j
 public class DefaultSecurityConfig {
 		
 	@Autowired
@@ -88,21 +90,25 @@ public class DefaultSecurityConfig {
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
         return username -> {
-            UmsAdmin admin = umsAdminService.getAdminByUsername(username);
+            SysUserInfo admin = umsAdminService.getAdminByUsername(username);
             if (admin != null) {
-                List<UmsPermission> permissionList = umsAdminService.getPermissionList(admin.getId());
+            	List<SysResouce> permissionList = umsAdminService.getPermissionList(admin.getId());
                 AdminUserDetails adminUserDetails = new AdminUserDetails(admin,permissionList);
                 //redis保存信息
-                globalCache.set(admin.getUsername(), adminUserDetails);
+                globalCache.set(admin.getUserCode(), adminUserDetails);
                 //封装返回
-    	        User user = new User(admin.getUsername(),admin.getPassword(), adminUserDetails.getAuthorities());
+    	        User user = new User(admin.getUserName(),admin.getPwd(), adminUserDetails.getAuthorities());
     	        return user;
             }
             throw new UsernameNotFoundException("用户名或密码错误");
         };
     }
     
-    
+    /**
+     * 说明：tonken增强
+     * @author WCH
+     * @datetime 2022-10-8 09:30:23
+     * 
     @Bean
     OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer() {
         return context -> {
@@ -110,21 +116,16 @@ public class DefaultSecurityConfig {
             Authentication principal = context.getPrincipal();
             Set<String> authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
             claims.claim("authorities", authorities);
-        	/**
-            if (context.getTokenType().equals(OAuth2TokenType.ACCESS_TOKEN.getValue())) {
-                Authentication principal = context.getPrincipal();
-                Set<String> authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-                context.getClaims().claim("user-authorities", authorities);
-            }
-            */
+            //claims.claim("subject", principal.getName());
         };
     }
-    
+    * */
 
     /**
-     * jwt解码器
+     * 说明：jwt解码器
      * 客户端认证授权后，需要访问user信息，解码器可以从令牌中解析出user信息
-     *
+     * @author WCH
+     * @datetime 2022-10-8 09:30:49
      * @return
      */
     @SneakyThrows

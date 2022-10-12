@@ -43,10 +43,6 @@ import lombok.SneakyThrows;
  * @author wch
  * Date 2022/5/10
  * @version 1.0
- * 
- *  /oauth2/revoke  注销请求
- *  
- * 
  */
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfiguration {
@@ -130,11 +126,11 @@ public class AuthorizationServerConfiguration {
         // JWT（Json Web Token）的配置项：TTL、是否复用refrechToken等等
         TokenSettings tokenSettings = TokenSettings.builder()
                 // 令牌存活时间：2小时
-                .accessTokenTimeToLive(Duration.ofHours(8))
+                .accessTokenTimeToLive(Duration.ofHours(1))
                 // 令牌可以刷新，重新获取
                 .reuseRefreshTokens(true)
                 // 刷新时间：30天（30天内当令牌过期时，可以用刷新令牌重新申请新令牌，不需要再认证）
-                .refreshTokenTimeToLive(Duration.ofDays(30))
+                .refreshTokenTimeToLive(Duration.ofDays(7))
                 .build();
         // 客户端相关配置
         ClientSettings clientSettings = ClientSettings.builder()
@@ -152,8 +148,6 @@ public class AuthorizationServerConfiguration {
                 .clientName("授权服务中心")
                 // 授权方法
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                // 密码模式 - 已废弃
-                //.authorizationGrantType(AuthorizationGrantType.PASSWORD)
                 // 授权模式
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 // 客户端模式
@@ -165,12 +159,10 @@ public class AuthorizationServerConfiguration {
                  * 不在此列的地址将被拒统；
                  * 只能使用IP或域名，不能使用localhost
                  */
-                .redirectUri("http://127.0.0.1:8000/login/oauth2/code/myClient")
+                .redirectUri("http://127.0.0.1:9001/pms-admin/admin/login/")
                 .redirectUri("http://127.0.0.1:8000")
                 // 授权范围（当前客户端的授权范围）
                 .scope(OidcScopes.OPENID)
-				.scope("message.read")
-				.scope("message.write")
                 // JWT（Json Web Token）配置项
                 .tokenSettings(tokenSettings)
                 // 客户端配置项
