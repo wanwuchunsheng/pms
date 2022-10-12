@@ -1,1 +1,35 @@
-上传私服： clean deploy -X
+上传私服库： clean deploy -X
+环境需求：
+	JDK >= 11
+	MySQL >= 5.7
+	Maven >= 3.0
+
+一、配置本地maven环境，指向私服库
+1.引入私服库地址，将pms>doc>settings-windmagics.xml 文件拷贝到本地maven>conf目录下（如：D:\\apache-maven-3.6.2\conf）
+2.开发工具idea,sts maven环境引入settings-windmagics.xml
+
+二、配置本地host,添加域名os.com
+1.进入host文件录入：C:\Windows\System32\drivers\etc\
+2.编辑host，增加： 127.0.0.1 os.com
+3.保存退出
+
+三、启动pms-admin项目,扫码登录
+1.run com.pms.admin.AdminApplication 
+2.浏览器输入扫码登录地址： https://oapi.dingtalk.com/connect/qrconnect?appid=ding0xpwlxnnlt2pnuqn&response_type=code&scope=snsapi_login&state=1664175830163&redirect_uri=http://192.168.0.64:9100/pms-admin/dingtalk/dingtalkCallback
+3.钉钉扫码登录，成功返回登录信息，下次请求其他api接口,请求头带上accessToken
+
+四、框架技术版本说明
+SpringBoot 2.7.X
+SpringSecurity 5.X
+Mybatis-plus 3.5.X
+
+五、系统模块
+pms                                   // 天利项目管理系统
+├── pms-admin                         // 系统管理模块（用户、角色、组织机构、权限等管理） [9100]
+│        └── config                   // 基础配置
+│        └── modules                  // 功能模块
+│        └── AdminApplication         // 模块入口
+├── pms-authorization-server          // 认证中心  [9000]
+│
+├──pom.xml                // 公共依赖
+
