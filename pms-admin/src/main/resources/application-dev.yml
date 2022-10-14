@@ -1,6 +1,6 @@
 # tomcat
 server:
-  port: 9001
+  port: 9100
   tomcat:
     remote-ip-header: x-forward-for
     uri-encoding: UTF-8

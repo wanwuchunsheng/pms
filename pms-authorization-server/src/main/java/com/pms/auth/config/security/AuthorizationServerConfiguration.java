@@ -159,7 +159,7 @@ public class AuthorizationServerConfiguration {
                  * 不在此列的地址将被拒统；
                  * 只能使用IP或域名，不能使用localhost
                  */
-                .redirectUri("http://127.0.0.1:9001/pms-admin/admin/login/")
+                .redirectUri("http://127.0.0.1:9100/pms-admin/admin/login/")
                 .redirectUri("http://127.0.0.1:8000")
                 // 授权范围（当前客户端的授权范围）
                 .scope(OidcScopes.OPENID)

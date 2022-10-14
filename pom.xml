@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.tl</groupId>
 	<artifactId>pms</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.1.RELEASE</version>
 	<packaging>pom</packaging>
 	<name>pms</name>
 	<description>天利管理项目</description>
@@ -36,8 +36,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>11</java.version>
-		<pms.version>0.0.1-SNAPSHOT</pms.version>
-		<pms.security.version>0.0.1-20221012.065625-1</pms.security.version>
+		<pms.version>${project.version}</pms.version>
 		<hutool.version>5.8.0</hutool.version>
         <mysql.connector.java>8.0.15</mysql.connector.java>
         <com.alibaba.druid>1.2.9</com.alibaba.druid>
