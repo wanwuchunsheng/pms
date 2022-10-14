@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.tl</groupId>
 	<artifactId>pms</artifactId>
-	<version>0.1.1.RELEASE</version>
+	<version>${reversion}</version>
 	<packaging>pom</packaging>
 	<name>pms</name>
 	<description>天利管理项目</description>
@@ -33,10 +33,10 @@
   	</distributionManagement>
 	
 	<properties>
+	    <reversion>0.1.2.RELEASE</reversion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>11</java.version>
-		<pms.version>${project.version}</pms.version>
 		<hutool.version>5.8.0</hutool.version>
         <mysql.connector.java>8.0.15</mysql.connector.java>
         <com.alibaba.druid>1.2.9</com.alibaba.druid>
@@ -81,17 +81,17 @@
 	
 	<dependencyManagement>
         <dependencies>
-        	<!-- pms-common -->
+	        <!-- pms-common -->
 	        <dependency>
 	            <groupId>com.pms.common</groupId>
 	  			<artifactId>pms-common</artifactId>
-	            <version>${pms.version}</version>
+	            <version>${reversion}</version>
 	        </dependency>
 	        <!-- security安全模块 -->
 	        <dependency>
 	        	<groupId>com.pms.security</groupId>
   				<artifactId>pms-security</artifactId>
-	  			<version>${pms.version}</version>
+	  			<version>${reversion}</version>
 	        </dependency>
 	        <!-- 钉钉sdk -->
 	        <dependency>
