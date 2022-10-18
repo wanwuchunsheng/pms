@@ -15,9 +15,9 @@ public class SysResouce implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private long id;
-	private long uid;
-	private long pid;
+	private Long id;
+	private Long uid;
+	private Long pid;
 	/**
 	 * 资源图标
 	 */
@@ -41,21 +41,25 @@ public class SysResouce implements Serializable{
 	/**
 	 * 资源等级
 	 */
-	private int level;
+	private Integer level;
 	/**
 	 * 排序
 	 */
-	private int sort;
+	private Integer sort;
 	/**
 	 * 备注
 	 */
 	private String remark;
 	/**
+	 * 是否启用 0启用1禁用
+	 */
+	private Integer enable;
+	/**
 	 * 租户扩展字段
 	 */
-	private long tenantId;
+	private Long tenantId;
 	private Date updateTime;
-	private long updateUserId;
+	private Long updateUserId;
 	private String updateUserName;
 
 }

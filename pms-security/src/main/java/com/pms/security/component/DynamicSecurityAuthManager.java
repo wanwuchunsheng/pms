@@ -14,6 +14,7 @@ import com.pms.common.pojo.User;
 import com.pms.security.service.DynamicSecurityService;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -43,6 +44,9 @@ public class DynamicSecurityAuthManager {
             String path = request.getServletPath();
             //4、判断当前路径和资源权限路径
             if(iterator.contains(path)) {
+            	user.setResouceList(null);
+            	user.setPermissionList(null);
+            	request.setAttribute("userInfo", JSONUtil.parse(user));
             	return true;
             }
 		} catch (Exception e) {

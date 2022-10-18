@@ -58,7 +58,7 @@ public class SysUserInfo implements Serializable {
 	/**
 	 * 性别
 	 */
-	private int sex;
+	private Integer sex;
 	/**
 	 * 头像地址
 	 */
@@ -74,13 +74,13 @@ public class SysUserInfo implements Serializable {
 	/**
 	 * 是否启用 0启用1禁用
 	 */
-	private int enable;
+	private Integer enable;
 	/**
 	 * 租户id
 	 */
-	private long tenantId;
+	private Long tenantId;
 	private Date updateTime;
-	private long updateUserId;
+	private Long updateUserId;
 	private String updateUserName;
 
 }
