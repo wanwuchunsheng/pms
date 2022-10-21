@@ -45,7 +45,6 @@ public class SecurityConfig {
                 .anyRequest()
                 //.authenticated()
                 .access("@dynamicSecurityAuthManager.canAccess(request,authentication)")
-                // 关闭跨站请求防护及不使用session
                 .and()
                 .csrf()
                 .disable()
@@ -56,15 +55,14 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .accessDeniedHandler(restfulAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
+                .and()
 			    // 除上面外的所有请求全部需要鉴权认证
-		        .and()
 		        // 资源服务内部JWT认证
 		        .oauth2ResourceServer(resourceServer -> resourceServer
 		                .accessDeniedHandler(restfulAccessDeniedHandler)
 		                .authenticationEntryPoint(restAuthenticationEntryPoint)
 		                .jwt()
 		        );
-        
         return httpSecurity.build();
     }
     

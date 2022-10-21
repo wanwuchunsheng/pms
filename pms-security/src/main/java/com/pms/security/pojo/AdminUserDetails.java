@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.pms.common.pojo.SysResouce;
+import com.pms.common.pojo.SysRole;
 import com.pms.common.pojo.SysUserInfo;
 
 import lombok.Getter;
@@ -24,17 +25,20 @@ public class AdminUserDetails implements UserDetails {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private String accessToken;
+    private String dingtalkAccessToken;
 	private SysUserInfo pmsUserInfo;
-    
-    private List<SysResouce> pmsResouceList;
+    private List<SysResouce> resouceList;
+    private List<SysRole> roleList;
   
     public AdminUserDetails() {
     	
     }
     
-    public AdminUserDetails(SysUserInfo pmsUserInfo, List<SysResouce> pmsResouceList) { 
+    public AdminUserDetails(SysUserInfo pmsUserInfo, List<SysResouce> pmsResouceList,List<SysRole> roleList) { 
         this.pmsUserInfo = pmsUserInfo;
-        this.pmsResouceList = pmsResouceList;
+        this.resouceList = pmsResouceList;
+        this.roleList = roleList;
     }
 
     /**
@@ -46,12 +50,11 @@ public class AdminUserDetails implements UserDetails {
     @Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
         //返回当前用户的权限
-        return pmsResouceList.stream()
+        return resouceList.stream()
                 .filter(permission -> permission.getResPath()!=null)
                 .map(permission ->new SimpleGrantedAuthority(permission.getResPath()))
                 .collect(Collectors.toList());
     }
-
     
     @Override
     public String getPassword() {

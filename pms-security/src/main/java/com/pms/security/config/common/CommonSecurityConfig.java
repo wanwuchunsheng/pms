@@ -41,6 +41,6 @@ public class CommonSecurityConfig {
     public DynamicSecurityAuthManager dynamicSecurityAuthManager() {
         return new DynamicSecurityAuthManager();
     }
-  
+   
     
 }

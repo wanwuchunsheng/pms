@@ -60,7 +60,7 @@ spring:
      logSlowSql: true
   #redis config
   redis:
-    host: 101.201.67.138
+    host: 192.168.1.151 #101.201.67.138
     port: 6379
     password: wind2@ # 如果未单独配置默认为空即可
     timeout: 3000
@@ -87,6 +87,7 @@ secure:
       - /actuator/**
       - /druid/**
       - /admin/login
+      - /dingtalk/dingtalkCallback
              
 #security jwt（校验jwt签名）
 jwt:

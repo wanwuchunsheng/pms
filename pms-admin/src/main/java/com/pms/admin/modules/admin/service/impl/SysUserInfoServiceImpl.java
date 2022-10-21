@@ -15,6 +15,7 @@ import com.pms.admin.modules.admin.dao.SysUserRoleDao;
 import com.pms.admin.modules.admin.entity.SysRole;
 import com.pms.admin.modules.admin.entity.SysUserRole;
 import com.pms.admin.modules.admin.service.ISysUserInfoService;
+import com.pms.common.constant.Constants;
 import com.pms.common.pojo.Result;
 import com.pms.common.pojo.SysResouce;
 import com.pms.common.pojo.SysUserInfo;
@@ -101,7 +102,7 @@ public class SysUserInfoServiceImpl implements ISysUserInfoService{
 		sui.setSex(2);
 		sui.setRemark(dingtalkUser.getRemark());
 		sui.setEnable(0);
-		sui.setPwd(passwordEncoder.encode("123456"));
+		sui.setPwd(passwordEncoder.encode(Constants.DEFAULT_PWD));
 		sysUserInfoDao.insert(sui);
 		return sui;
 	}
@@ -115,7 +116,7 @@ public class SysUserInfoServiceImpl implements ISysUserInfoService{
 	@Override
 	public SysRole saveRole(SysUserInfo sui) {
 		QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("role_code", "DefualtRole");
+		queryWrapper.eq("role_code", Constants.DEFAULT_ROLE);
 		SysRole sr = sysRoleDao.selectOne(queryWrapper);
 		if(ObjectUtil.isNotEmpty(sr)) {
 			SysUserRole sur = new SysUserRole();

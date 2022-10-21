@@ -1,16 +1,15 @@
 package com.pms.security.component;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
 import com.pms.common.constant.Constants;
-import com.pms.common.pojo.SysResouce;
-import com.pms.common.pojo.User;
+import com.pms.security.pojo.AdminUserDetails;
 import com.pms.security.service.DynamicSecurityService;
 
 import cn.hutool.core.util.ObjectUtil;
@@ -33,21 +32,20 @@ public class DynamicSecurityAuthManager {
     	try {
     		//1、获取access_token
             String authorization = request.getHeader(Constants.AUTHORIZATION);
-            if(ObjectUtil.isEmpty(authorization)) {
-            	return true;
-            }
-            String accessToken = authorization.substring(Constants.BEARER.length());
-            //2、获取登录用户可访问资源权限
-            User user = dynamicSecurityService.loadDataSource(accessToken);
-            List<String> iterator = user.getPermissionList();
-            //3、获取当前访问的路径
-            String path = request.getServletPath();
-            //4、判断当前路径和资源权限路径
-            if(iterator.contains(path)) {
-            	user.setResouceList(null);
-            	user.setPermissionList(null);
-            	request.setAttribute("userInfo", JSONUtil.parse(user));
-            	return true;
+            if(ObjectUtil.isNotEmpty(authorization)) {
+            	String accessToken = authorization.substring(Constants.BEARER.length());
+            	//2、获取登录用户可访问资源权限
+                AdminUserDetails user = dynamicSecurityService.loadDataSource(accessToken);
+                Collection<? extends GrantedAuthority> iterator = user.getAuthorities();
+                //3、获取当前访问的路径
+                String path = request.getServletPath();
+                //4、判断当前路径和资源权限路径
+                for (GrantedAuthority authority : iterator) {
+                    if (authority.getAuthority().equals(path)){
+                    	request.setAttribute("userInfo", JSONUtil.parse(user));
+                        return true;
+                    }
+                }
             }
 		} catch (Exception e) {
 			e.printStackTrace();

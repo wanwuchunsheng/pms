@@ -20,6 +20,7 @@ import com.pms.common.pojo.SysResouce;
 import com.pms.common.pojo.SysUserInfo;
 import com.pms.common.pojo.User;
 import com.pms.common.redis.IGlobalCache;
+import com.pms.security.pojo.AdminUserDetails;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
@@ -94,7 +95,7 @@ public class DingTalkController {
         	//绑定默认角色
         	sysUserInfoService.saveRole(sui);
         }
-        //6、查询用户所有资源权限
+        //6、查询用户：角色-资源
         List<SysResouce> resList = sysUserInfoService.getPermissionList(sui.getId());
         //7、查询用户所有角色
         List<com.pms.common.pojo.SysRole> roleList = sysUserInfoService.getRoleList(sui.getId());
@@ -103,21 +104,19 @@ public class DingTalkController {
         if(resLocalAccessToken.getCode()!=200) {
         	return resLocalAccessToken;
         }
-        //9、封装返回信息
+        //9、封装redis存储对象
 		Map<String,Object> localMap = (Map<String, Object>) resLocalAccessToken.getData();
-		User user = new User();
-		BeanUtils.copyProperties(sui ,user );
-		user.setAccessToken(Convert.toStr(localMap.get("access_token")));
-		user.setDingtalkAccessToken(Convert.toStr(resAccessToken.getData()));
-		user.setDingtalkDeptId(Convert.toStr(dingtalkUser.getDeptIdList()));
-		user.setDingtalkUserId(dingtalkUser.getUserid());
-		user.setDingtalkUnionId(dingtalkUser.getUnionid());
-		//user.setResouceList(resList);
-		user.setRoleList(roleList);
-		user.setPermissionList(resList.stream().map(SysResouce::getResPath).collect(Collectors.toList()));
+		sui.setDingtalkDeptId(Convert.toStr(dingtalkUser.getDeptIdList()));
+		sui.setDingtalkUserId(dingtalkUser.getUserid());
+		sui.setDingtalkUnionId(dingtalkUser.getUnionid());
+		AdminUserDetails adminUser = new AdminUserDetails(sui,resList,roleList);
+		adminUser.setAccessToken(Convert.toStr(localMap.get("access_token")));
+		adminUser.setDingtalkAccessToken(Convert.toStr(resAccessToken.getData()));
         //10、存入redis
-        globalCache.set(Constants.JUSTAUTH+user.getAccessToken(), JSONUtil.parse(user) , Constants.REDIS_TOKEN_TIMEOUT);
-        return Result.success(user);
+        globalCache.set(Constants.JUSTAUTH+adminUser.getAccessToken(), JSONUtil.parse(adminUser) , Constants.REDIS_TOKEN_TIMEOUT);
+        adminUser.getPmsUserInfo().setPwd(null);
+        adminUser.setDingtalkAccessToken(null);
+        return Result.success(adminUser);
     }
 
 	

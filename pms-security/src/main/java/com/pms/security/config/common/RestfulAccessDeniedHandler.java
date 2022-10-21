@@ -20,12 +20,16 @@ import cn.hutool.json.JSONUtil;
  * @Ddatetime 2022年7月7日17:46:48
  */
 public class RestfulAccessDeniedHandler implements AccessDeniedHandler{
+	
     @Override
     public void handle(HttpServletRequest request,HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
-        response.setCharacterEncoding("UTF-8");
+    	response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Cache-Control","no-cache");
+    	response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.getWriter().println(JSONUtil.parse(Result.failed(HttpStatus.HTTP_FORBIDDEN, "无访问权限")));
         response.getWriter().flush();
     }
+    
 
 }

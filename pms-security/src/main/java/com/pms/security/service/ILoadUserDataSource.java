@@ -1,10 +1,10 @@
 package com.pms.security.service;
 
-import com.pms.common.pojo.User;
 import com.pms.common.redis.IGlobalCache;
+import com.pms.security.pojo.AdminUserDetails;
 
 public interface ILoadUserDataSource {
 
-	User getUserDataSource(IGlobalCache globalCache,String key);
+	AdminUserDetails getUserDataSource(IGlobalCache globalCache,String key);
 
 }

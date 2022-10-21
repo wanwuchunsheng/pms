@@ -4,26 +4,24 @@
   	
   	<!-- 用户id查询资源权限 -->
 	<select id="getPermissionList" resultType="com.pms.common.pojo.SysResouce">
-	    select
-		      DISTINCT 
-					a.id,
-					a.uid,
-					a.pid,
-					a.icon,
-					a.res_name,
-					a.res_type,
-					a.res_path,
-					a.level,
-					a.sort,
-					a.remark,
-					a.tenant_id
-		from sys_resouce a,sys_user_resouce b
-		where a.id = b.res_id
-				 and b.user_id in (
-					select DISTINCT user_id  from sys_user_role where role_id in (
-					select role_id from sys_user_role where user_id = #{userId}
-				 )
-		)
+	    select 
+				DISTINCT 
+				a.id,
+				a.uid,
+				a.pid,
+				a.icon,
+				a.res_name,
+				a.res_type,
+				a.res_path,
+				a.permission,
+				a.level,
+				a.sort,
+				a.remark,
+				a.tenant_id
+		 from sys_resouce a, sys_role b, sys_role_resouce c ,sys_user_role d
+		where a.id = c.res_id and b.id = c.role_id and d.role_id = b.id 
+		and d.user_id = #{userId} 
+		order by id,sort
   	</select>
   
 </mapper>
