@@ -4,6 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.pms.common.pojo.User;
 
+import cn.hutool.json.JSONUtil;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class UserProfile {
 	
 	
@@ -15,7 +19,13 @@ public class UserProfile {
 	 * 
 	 * */
 	public static User getUser(HttpServletRequest request) {
-		return (User) request.getAttribute("userInfo");
+		try {
+			User user = JSONUtil.toBean(JSONUtil.parseObj( request.getAttribute("userInfo")) , User.class);
+			return user;
+		} catch (Exception e) {
+			log.error("获取全局用户登录信息异常：{}",e.getMessage());
+		}
+		return null; 
 	}
 
 }
