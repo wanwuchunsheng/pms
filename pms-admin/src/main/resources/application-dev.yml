@@ -88,6 +88,7 @@ secure:
       - /druid/**
       - /admin/login
       - /dingtalk/dingtalkCallback
+      - /app/dingtalkCallback
              
 #security jwt（校验jwt签名）
 jwt:
@@ -100,9 +101,15 @@ jwt:
 
 #Dingding扫码配置
 dingtalk:
-  appKey: "ding0xpwlxnnlt2pnuqn"
-  appKeySecret: "7CvQ383toWdeSRf8C7Gatp4ot-O-Sc_eAf2VOdqn3GS1qU3Ca4A0AvAtMexkEFrf"
+  
+  #企业内部微应用/小程序
+  appKey: "dingqrb61fohwuxecdmh"
+  appKeySecret: "dpgbe0fZRPqfV4DpnMewvdcXJeSMsojN2lNG_7DYSIpeLYnXDiw220pGt632MHYW"
+  #企业内部应用
+  appId: "ding0xpwlxnnlt2pnuqn"
+  appSecret: "7CvQ383toWdeSRf8C7Gatp4ot-O-Sc_eAf2VOdqn3GS1qU3Ca4A0AvAtMexkEFrf"
   getTokenUrl: "https://oapi.dingtalk.com/gettoken"
+  getAppUserInfoUrl: "https://oapi.dingtalk.com/user/getuserinfo"
   getUserInfoUrl: "https://oapi.dingtalk.com/sns/getuserinfo_bycode"
   getUnionIdUrl: "https://oapi.dingtalk.com/topapi/user/getbyunionid"
   getUserByUserIdUrl: "https://oapi.dingtalk.com/topapi/v2/user/get"

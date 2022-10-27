@@ -1,4 +1,4 @@
-package com.pms.admin.modules.dingtalk.controller;
+package com.pms.admin.modules.app.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dingtalk.api.response.OapiV2UserGetResponse.UserGetResponse;
 import com.pms.admin.modules.admin.service.IAdminService;
 import com.pms.admin.modules.admin.service.ISysUserInfoService;
-import com.pms.admin.modules.dingtalk.service.IDingTalkService;
+import com.pms.admin.modules.app.service.IAppLoginService;
 import com.pms.common.constant.Constants;
 import com.pms.common.pojo.Result;
 import com.pms.common.pojo.SysResouce;
@@ -25,26 +25,24 @@ import com.pms.security.pojo.AdminUserDetails;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import lombok.extern.log4j.Log4j2;
+import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p>钉钉扫码登录</p>
- *
+ * @Date: 2019-10-25 15:04:26
+ * @Description: 手机APP控制器
  * @author WCH
- * Date 2022/5/10
- * @version 1.0
  */
 @RestController
-@RequestMapping("/dingtalk")
-@Log4j2
+@RequestMapping("app")
+@Slf4j
+@Api("手机APP控制器")
 @Validated
-public class DingTalkController {
-	
+public class AppLoginController {
+
+
 	@Autowired
-	private IDingTalkService dingTalkService;
+	private IAppLoginService appLoginService;
 	
 	@Autowired
 	private ISysUserInfoService sysUserInfoService;
@@ -55,32 +53,21 @@ public class DingTalkController {
 	@Autowired
 	private IGlobalCache globalCache;
 	
-
-    /***
-     * @Deprecated PC端企业内部应用
-     *               钉钉扫码登录
-     * @param code 钉钉扫码返回的code
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-	@GetMapping(value="/dingtalkCallback")
-    @ApiOperation(value = "钉钉扫码登录接口", notes = "钉钉扫码登录")
-    @ApiImplicitParams({
-        @ApiImplicitParam(paramType = "query", name = "code", value = "钉钉临时授权码", dataType = "String",required = true)
-    })
-    public Result<?> dingdingCallback( @NotBlank(message = "授权码不能为空") String code) {
-       	//1、获取钉钉access_token
-    	Result<?> resAccessToken = dingTalkService.getDingtalkAccessToken();
+	@SuppressWarnings("unchecked")
+	@GetMapping(value = "/dingtalkCallback")
+	public Result<?> dingdingCallback(@NotBlank(message = "授权码不能为空") String code) {
+		//1、获取钉钉access_token
+    	Result<?> resAccessToken = appLoginService.getDingtalkAccessToken();
     	if(resAccessToken.getCode() != 200) {
     		return resAccessToken;
     	}
-        //2、根据access_token和code获取用户userid
-        Result<?> resUserId = dingTalkService.getDingtalkUserId(Convert.toStr(resAccessToken.getData()), code);
+    	//2、根据access_token和code获取用户userid
+        Result<?> resUserId = appLoginService.getDingtalkUserId(Convert.toStr(resAccessToken.getData()), code);
         if(resUserId.getCode() != 200) {
     		return resUserId;
     	}
         //3、根据userId获取用户信息
-        Result<?> resUserInfo = dingTalkService.getDingtalkUserInfo(Convert.toStr(resAccessToken.getData()),Convert.toStr(resUserId.getData()));
+        Result<?> resUserInfo = appLoginService.getDingtalkUserInfo(Convert.toStr(resAccessToken.getData()),Convert.toStr(resUserId.getData()));
         if(resUserInfo.getCode() != 200) {
     		return resUserId;
     	}
@@ -106,7 +93,7 @@ public class DingTalkController {
         Result<?> resLocalAccessToken = adminService.getAuthAccessToken();
         if(resLocalAccessToken.getCode()!=200) {
         	return resLocalAccessToken;
-        }
+        } 
         //9、封装redis存储对象
 		Map<String,Object> localMap = (Map<String, Object>) resLocalAccessToken.getData();
 		sui.setDingtalkDeptId(Convert.toStr(dingtalkUser.getDeptIdList()));
@@ -122,6 +109,9 @@ public class DingTalkController {
         adminUser.setResouceList(null);
         adminUser.setRoleList(null);
         return Result.success(adminUser);
-    }
-    
+		 
+	}
+	
+	
+	
 }

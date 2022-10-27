@@ -12,6 +12,12 @@ import lombok.Getter;
 @Getter
 public class DingTalkConfig {
 	
+	@Value("${dingtalk.appId}")
+    private String appId;
+
+    @Value("${dingtalk.appSecret}")
+    private String appSecret;
+	
     @Value("${dingtalk.appKey}")
     private String appKey;
 
@@ -23,6 +29,9 @@ public class DingTalkConfig {
 
     @Value("${dingtalk.getUserInfoUrl}")
     private String getUserInfoUrl;
+    
+    @Value("${dingtalk.getAppUserInfoUrl}")
+    private String getAppUserInfoUrl;
 
     @Value("${dingtalk.getUnionIdUrl}")
     private String getUnionIdUrl;

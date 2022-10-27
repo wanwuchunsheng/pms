@@ -49,11 +49,16 @@ public class AdminUserDetails implements UserDetails {
      * */
     @Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-        //返回当前用户的权限
-        return resouceList.stream()
-                .filter(permission -> permission.getResPath()!=null)
-                .map(permission ->new SimpleGrantedAuthority(permission.getResPath()))
-                .collect(Collectors.toList());
+    	try {
+    		//返回当前用户的权限
+            return resouceList.stream()
+                    .filter(permission -> permission.getResPath()!=null)
+                    .map(permission ->new SimpleGrantedAuthority(permission.getResPath()))
+                    .collect(Collectors.toList());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+        return null;
     }
     
     @Override

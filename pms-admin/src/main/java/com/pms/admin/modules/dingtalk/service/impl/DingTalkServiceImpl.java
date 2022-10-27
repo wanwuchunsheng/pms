@@ -38,9 +38,9 @@ public class DingTalkServiceImpl implements IDingTalkService{
 			DingTalkClient clientDingTalkClient = new DefaultDingTalkClient(dingtalkConfig.getGetTokenUrl());
 	        OapiGettokenRequest request = new OapiGettokenRequest();
 	        // 填写步骤一创建应用的Appkey
-	        request.setAppkey(dingtalkConfig.getAppKey());
+	        request.setAppkey(dingtalkConfig.getAppId());
 	        // 填写步骤一创建应用的Appsecret
-	        request.setAppsecret(dingtalkConfig.getAppKeySecret());
+	        request.setAppsecret(dingtalkConfig.getAppSecret());
 	        request.setHttpMethod("GET");
 	        OapiGettokenResponse response =clientDingTalkClient.execute(request);
 	        if(response.getErrcode() == 0){
@@ -68,7 +68,7 @@ public class DingTalkServiceImpl implements IDingTalkService{
 	        OapiSnsGetuserinfoBycodeRequest reqBycodeRequest = new OapiSnsGetuserinfoBycodeRequest();
 	        // 通过扫描二维码，跳转指定的redirect_uri后，向url中追加的code临时授权码
 	        reqBycodeRequest.setTmpAuthCode(code);
-	        OapiSnsGetuserinfoBycodeResponse bycodeResponse = client2.execute( reqBycodeRequest, dingtalkConfig.getAppKey(), dingtalkConfig.getAppKeySecret());
+	        OapiSnsGetuserinfoBycodeResponse bycodeResponse = client2.execute( reqBycodeRequest, dingtalkConfig.getAppId(), dingtalkConfig.getAppSecret());
 	        if(bycodeResponse.getErrcode() != 0){
 	            return Result.failed(bycodeResponse.getErrmsg());
 	        }

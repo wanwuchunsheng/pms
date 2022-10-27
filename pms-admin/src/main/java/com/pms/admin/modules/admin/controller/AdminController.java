@@ -45,7 +45,6 @@ public class AdminController {
         @ApiImplicitParam(paramType = "query", name = "code", value = "授权码", dataType = "String",required = true)
     })
     public Result<?> Login(String code){
-    	log.info("____code:{}",code);
         return Result.success(code);
     }
 
