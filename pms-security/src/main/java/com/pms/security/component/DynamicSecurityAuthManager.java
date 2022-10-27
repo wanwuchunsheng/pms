@@ -48,8 +48,7 @@ public class DynamicSecurityAuthManager {
                 }
             }
 		} catch (Exception e) {
-			e.printStackTrace();
-			log.error("ERROR:鉴权异常! url:{}",request.getRequestURL());
+			log.error("ERROR:无权访问 url={}，消息：{}",request.getRequestURL(),e.getMessage());
 		}
 		return false;
 		

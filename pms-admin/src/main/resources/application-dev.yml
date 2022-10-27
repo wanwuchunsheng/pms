@@ -87,6 +87,7 @@ secure:
       - /actuator/**
       - /druid/**
       - /admin/login
+      - /admin/getPermission
       - /dingtalk/dingtalkCallback
       - /app/dingtalkCallback
              
@@ -101,7 +102,6 @@ jwt:
 
 #Dingding扫码配置
 dingtalk:
-  
   #企业内部微应用/小程序
   appKey: "dingqrb61fohwuxecdmh"
   appKeySecret: "dpgbe0fZRPqfV4DpnMewvdcXJeSMsojN2lNG_7DYSIpeLYnXDiw220pGt632MHYW"
