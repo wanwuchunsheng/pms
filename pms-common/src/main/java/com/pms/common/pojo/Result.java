@@ -41,6 +41,13 @@ public class Result<T> implements Serializable{
         this.code = code;
         this.message = message;
     }
+    
+    /**
+     * 成功返回结果
+     */
+    public static <T> Result<T> success() {
+        return new Result<T>(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage());
+    }
 
     /**
      * 成功返回结果
