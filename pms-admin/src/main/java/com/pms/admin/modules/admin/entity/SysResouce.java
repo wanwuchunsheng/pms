@@ -21,9 +21,9 @@ public class SysResouce implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@TableId(type = IdType.AUTO) 
-	private long id;
-	private long uid;
-	private long pid;
+	private Long id;
+	private Long uid;
+	private Long pid;
 	/**
 	 * 资源图标
 	 */
@@ -45,13 +45,18 @@ public class SysResouce implements Serializable{
 	 */
 	private String permission;
 	/**
+	 * 资源属性
+	 * 1.web 2.app
+	 */
+	private Integer propertyType;
+	/**
 	 * 资源等级
 	 */
-	private int level;
+	private Integer level;
 	/**
 	 * 排序
 	 */
-	private int sort;
+	private Integer sort;
 	/**
 	 * 备注
 	 */
@@ -59,9 +64,9 @@ public class SysResouce implements Serializable{
 	/**
 	 * 租户扩展字段
 	 */
-	private long tenantId;
+	private Long tenantId;
 	private Date updateTime;
-	private long updateUserId;
+	private Long updateUserId;
 	private String updateUserName;
 
 }

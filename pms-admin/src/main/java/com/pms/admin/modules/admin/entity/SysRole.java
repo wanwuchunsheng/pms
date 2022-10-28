@@ -17,15 +17,15 @@ public class SysRole implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private long id;
+	private Long id;
 	private String roleCode;
 	private String roleName;
-	private int sort;
-	private int enable;
+	private Integer sort;
+	private Integer enable;
 	private String remark;
-	private long tenantId;
+	private Long tenantId;
 	private String updateTime;
-	private long updateUserId;
+	private Long updateUserId;
 	private String updateUserName;
 
 }

@@ -22,7 +22,7 @@ public class SysUserInfo implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@TableId(type = IdType.AUTO) 
-	private long id;
+	private Long id;
 	private String userCode;
 	private String userName;
 	/**
@@ -41,14 +41,14 @@ public class SysUserInfo implements Serializable{
 	private String email;
 	private String mobile;
 	private String phone;
-	private int sex;
+	private Integer sex;
 	private String avatar;
 	private String address;
 	private String remark;
-	private int enable;
-	private long tenantId;
+	private Integer enable;
+	private Long tenantId;
 	private Date updateTime;
-	private long updateUserId;
+	private Long updateUserId;
 	private String updateUserName;
 	
 
