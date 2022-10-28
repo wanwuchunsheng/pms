@@ -34,6 +34,13 @@ public class SysResouce implements Serializable{
 	 * 资源路径
 	 */
 	private String resPath;
+	
+	/**
+	 * 资源属性
+	 * 1.web 2.app
+	 */
+	private Integer propertyType;
+	
 	/**
 	 * 权限
 	 */
