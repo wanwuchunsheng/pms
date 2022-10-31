@@ -52,8 +52,8 @@ public class AdminUserDetails implements UserDetails {
     	try {
     		//返回当前用户的权限
             return resouceList.stream()
-                    .filter(permission -> permission.getResPath()!=null)
-                    .map(permission ->new SimpleGrantedAuthority(permission.getResPath()))
+                    .filter(permission -> permission.getPermission()!=null)
+                    .map(permission ->new SimpleGrantedAuthority(permission.getPermission()))
                     .collect(Collectors.toList());
 		} catch (Exception e) {
 			// TODO: handle exception

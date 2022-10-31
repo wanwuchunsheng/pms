@@ -47,8 +47,8 @@ public class AdminUserDetails implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
         //返回当前用户的权限
         return pmsResouceList.stream()
-                .filter(permission -> permission.getResPath()!=null)
-                .map(permission ->new SimpleGrantedAuthority(permission.getResPath()))
+                .filter(permission -> permission.getPermission()!=null)
+                .map(permission ->new SimpleGrantedAuthority(permission.getPermission()))
                 .collect(Collectors.toList());
     }
 

@@ -13,6 +13,7 @@
 				a.res_name,
 				a.res_type,
 				a.res_path,
+				a.route_path,
 				a.permission,
 				a.level,
 				a.sort,
