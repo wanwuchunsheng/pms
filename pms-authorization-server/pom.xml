@@ -126,7 +126,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.pms.auth.AuthServerApplications</mainClass>
+                    <mainClass>com.pms.auth.AuthServerApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
