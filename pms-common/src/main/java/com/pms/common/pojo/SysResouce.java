@@ -38,7 +38,10 @@ public class SysResouce implements Serializable{
 	 * 路由地址
 	 */
 	private String routePath;
-	
+	/**
+	 * 组件地址
+	 */
+	private String componentPath;
 	/**
 	 * 资源属性
 	 * 1.web 2.app
