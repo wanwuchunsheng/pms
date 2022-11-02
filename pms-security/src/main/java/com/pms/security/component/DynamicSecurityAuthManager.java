@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.util.AntPathMatcher;
 
 import com.pms.common.constant.Constants;
 import com.pms.security.pojo.AdminUserDetails;
@@ -28,6 +29,8 @@ public class DynamicSecurityAuthManager {
 	@Autowired
     private DynamicSecurityService dynamicSecurityService;
 	
+	private static AntPathMatcher matcher = new AntPathMatcher();
+	
     public boolean canAccess(HttpServletRequest request, Authentication authentication) {
     	try {
     		//1、获取access_token
@@ -41,10 +44,10 @@ public class DynamicSecurityAuthManager {
                 String path = request.getServletPath();
                 //4、判断当前路径和资源权限路径
                 for (GrantedAuthority authority : iterator) {
-                    if (authority.getAuthority().equals(path)){
-                    	request.setAttribute("userInfo", JSONUtil.parse(user));
+                	if(matcher.match(authority.getAuthority(), path)) {
+                		request.setAttribute("userInfo", JSONUtil.parse(user));
                         return true;
-                    }
+                	}
                 }
             }
 		} catch (Exception e) {

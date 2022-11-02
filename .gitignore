@@ -7,3 +7,5 @@ pms-common/.factorypath
 pms-security/target
 pms-security/.classpath
 pms-security/.factorypath
+pms-authorization-server/.factorypath
+pms-admin/.factorypath
