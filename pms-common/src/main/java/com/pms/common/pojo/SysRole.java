@@ -7,9 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <p>
@@ -19,56 +18,21 @@ import lombok.experimental.Accessors;
  * @Author scott
  * @since 2018-12-19
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
+@Getter
+@Setter
 public class SysRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
     private Long id;
-    
-    /**
-     * 角色名称
-     */
-    private String roleName;
-    
-    /**
-     * 角色编码
-     */
-    private String roleCode;
-    
-    /**
-          * 描述
-     */
-    private String description;
-
-    /**
-     * 创建人
-     */
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
-
-    /**
-     * 更新人
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
-
+	private String roleCode;
+	private String roleName;
+	private Integer sort;
+	private Integer enable;
+	private String remark;
+	private Long tenantId;
+	private String updateTime;
+	private Long updateUserId;
+	private String updateUserName;
 
 }
