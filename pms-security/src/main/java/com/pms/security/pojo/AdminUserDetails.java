@@ -27,7 +27,7 @@ public class AdminUserDetails implements UserDetails {
 	private String accessToken;
     private String dingtalkAccessToken;
 	private SysUserInfo pmsUserInfo;
-	private List<SysPermission> perList;
+	private List<SysPermission> permsList;
     private List<SysRole> roleList;
   
     public AdminUserDetails() {
@@ -36,7 +36,7 @@ public class AdminUserDetails implements UserDetails {
     
     public AdminUserDetails(SysUserInfo pmsUserInfo, List<SysPermission> perList,List<SysRole> roleList) { 
         this.pmsUserInfo = pmsUserInfo;
-        this.perList = perList;
+        this.permsList = perList;
         this.roleList = roleList;
     }
 
@@ -44,7 +44,7 @@ public class AdminUserDetails implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
     	try {
     		//返回当前用户的权限
-            return perList.stream()
+            return permsList.stream()
                     .filter(perms -> perms.getPerms()!=null)
                     .map(perms ->new SimpleGrantedAuthority(perms.getPerms()))
                     .collect(Collectors.toList());
@@ -53,20 +53,6 @@ public class AdminUserDetails implements UserDetails {
 		}
         return null;
     }
-	/**
-     * 
-     * list.stream().map().collect()方法,
-     * 可以获取list中JavaBean的某个字段,转成一个新的list
-     * @Override
-     * 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-       //不能返回null
-        return authorities;
-    }
-     * 
-     * */
-    
     
     @Override
     public String getPassword() {

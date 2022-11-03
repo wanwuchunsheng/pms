@@ -24,6 +24,7 @@ import com.pms.common.constant.Constants;
 import com.pms.common.pojo.Result;
 import com.pms.common.pojo.SysUserInfo;
 import com.pms.common.redis.IGlobalCache;
+import com.pms.common.pojo.SysRole;
 import com.pms.security.pojo.AdminUserDetails;
 
 import cn.hutool.core.convert.Convert;
@@ -32,7 +33,6 @@ import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -106,7 +106,7 @@ public class DingTalkController {
         //6、查询用户：角色-资源
         List<SysPermission> resList = sysUserInfoService.getPermissionList(sui.getId(),Constants.PROPERTYTYPE_WEB);
         //7、查询用户所有角色
-        List<com.pms.common.pojo.SysRole> roleList = sysUserInfoService.getRoleList(sui.getId());
+        List<SysRole> roleList = sysUserInfoService.getRoleList(sui.getId());
         //8、获取本地授权服务器local_access_token
         Result<?> resLocalAccessToken = adminService.getAuthAccessToken();
         if(resLocalAccessToken.getCode()!=200) {
@@ -127,7 +127,7 @@ public class DingTalkController {
         adminUser.getPmsUserInfo().setPwd(null);
         adminUser.setDingtalkAccessToken(null);
         adminUser.setRoleList(null);
-        adminUser.setPerList(null);
+        adminUser.setPermsList(null);
         return Result.success(adminUser);
     }
     
@@ -179,7 +179,7 @@ public class DingTalkController {
         //6、查询用户：角色-资源
         List<SysPermission> resList = sysUserInfoService.getPermissionList(sui.getId(),Constants.PROPERTYTYPE_WEB);
         //7、查询用户所有角色
-        List<com.pms.common.pojo.SysRole> roleList = sysUserInfoService.getRoleList(sui.getId());
+        List<SysRole> roleList = sysUserInfoService.getRoleList(sui.getId());
         //8、获取本地授权服务器local_access_token
         Result<?> resLocalAccessToken = adminService.getAuthAccessToken();
         if(resLocalAccessToken.getCode()!=200) {
@@ -199,7 +199,7 @@ public class DingTalkController {
         adminUser.getPmsUserInfo().setPwd(null);
         adminUser.setDingtalkAccessToken(null);
         adminUser.setRoleList(null);
-        adminUser.setPerList(null);
+        adminUser.setPermsList(null);
         return Result.success(adminUser);
     }
 }

@@ -142,28 +142,6 @@ public class DingTalkServiceImpl implements IDingTalkService{
         	GetUserResponse res =   client.getUserWithOptions("me", getUserHeaders, new RuntimeOptions());
         	log.info("___oauth2.0方式获取用户信息：{}",JSONUtil.parse(res));
         	return Result.success(res.getBody().getUnionId());
-        	/***
-        	//2获取免登陆token
-        	DingTalkClient clientDingTalkClient = new DefaultDingTalkClient(dingtalkConfig.getGetTokenUrl());
-	        OapiGettokenRequest request = new OapiGettokenRequest();
-	        request.setAppkey(dingtalkConfig.getAppId());
-	        request.setAppsecret(dingtalkConfig.getAppSecret());
-	        request.setHttpMethod("GET");
-	        OapiGettokenResponse response =clientDingTalkClient.execute(request);
-	        log.info("2___snsToken={}",JSONUtil.parse(response));
-	        //3获取userId
-	        DingTalkClient clientDingTalkClient2 = new DefaultDingTalkClient(dingtalkConfig.getGetUnionIdUrl());
-            OapiUserGetbyunionidRequest reqGetbyunionidRequest = new OapiUserGetbyunionidRequest();
-            reqGetbyunionidRequest.setUnionid(res.getBody().getUnionId());
-            OapiUserGetbyunionidResponse oapiUserGetbyunionidResponse = clientDingTalkClient2.execute(reqGetbyunionidRequest, response.getAccessToken());
-            if (oapiUserGetbyunionidResponse.getErrcode() != 0) {
-            	//异常返回提醒
-                return Result.failed(oapiUserGetbyunionidResponse.getErrmsg());
-            }
-            log.info("3___userId={}",JSONUtil.parse(oapiUserGetbyunionidResponse.getResult().getUserid()));
-            //4根据userId获取用户信息
-            return getDingtalkUserInfo( response.getAccessToken(),oapiUserGetbyunionidResponse.getResult().getUserid());
-            */
         } catch (Exception e) {
            log.error("钉钉oauth2.0方式获取用户信息失败", e.getMessage());
         }    

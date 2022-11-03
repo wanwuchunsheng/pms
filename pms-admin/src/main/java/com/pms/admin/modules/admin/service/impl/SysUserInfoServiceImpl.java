@@ -9,17 +9,17 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dingtalk.api.response.OapiV2UserGetResponse.UserGetResponse;
 import com.pms.admin.config.constant.CommonConstant;
-import com.pms.admin.modules.admin.dao.SysPermissionDao;
-import com.pms.admin.modules.admin.dao.SysRoleDao;
+import com.pms.admin.modules.admin.dao.SysAdminPermissionDao;
+import com.pms.admin.modules.admin.dao.SysAdminRoleDao;
 import com.pms.admin.modules.admin.dao.SysUserInfoDao;
 import com.pms.admin.modules.admin.dao.SysUserRoleDao;
-import com.pms.admin.modules.admin.entity.SysPermission;
-import com.pms.admin.modules.admin.entity.SysRole;
 import com.pms.admin.modules.admin.entity.SysUserRole;
 import com.pms.admin.modules.admin.service.ISysUserInfoService;
 import com.pms.common.constant.Constants;
 import com.pms.common.pojo.Result;
 import com.pms.common.pojo.SysUserInfo;
+import com.pms.common.pojo.SysRole;
+import com.pms.common.pojo.SysPermission;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
@@ -34,10 +34,10 @@ public class SysUserInfoServiceImpl implements ISysUserInfoService{
 	private SysUserInfoDao sysUserInfoDao;
 	
 	@Autowired
-	private SysPermissionDao sysPermissionDao;
+	private SysAdminPermissionDao sysPermissionDao;
 	
 	@Autowired
-	private SysRoleDao sysRoleDao;
+	private SysAdminRoleDao sysAdminRoleDao;
 	
 	@Autowired
 	private SysUserRoleDao sysUserRoleDao;
@@ -79,7 +79,7 @@ public class SysUserInfoServiceImpl implements ISysUserInfoService{
 	 * 
 	 * */
 	@Override
-	public List<com.pms.common.pojo.SysPermission> getPermissionList(Long userId,String propertyType) {
+	public List<SysPermission> getPermissionList(Long userId,String propertyType) {
 		return sysPermissionDao.getPermissionList(userId, propertyType);
 	}
 
@@ -118,7 +118,7 @@ public class SysUserInfoServiceImpl implements ISysUserInfoService{
 	public SysRole saveRole(SysUserInfo sui) {
 		QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("role_code", Constants.DEFAULT_ROLE);
-		SysRole sr = sysRoleDao.selectOne(queryWrapper);
+		SysRole sr = sysAdminRoleDao.selectOne(queryWrapper);
 		if(ObjectUtil.isNotEmpty(sr)) {
 			SysUserRole sur = new SysUserRole();
 			sur.setRoleId(sr.getId());
@@ -135,7 +135,7 @@ public class SysUserInfoServiceImpl implements ISysUserInfoService{
 	 * */
 	@Override
 	public List<com.pms.common.pojo.SysRole> getRoleList(Long id) {
-		return sysRoleDao.getRoleList(id);
+		return sysAdminRoleDao.getRoleList(id);
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class SysUserInfoServiceImpl implements ISysUserInfoService{
 	 * 
 	 * */
 	@Override
-	public List<com.pms.common.pojo.SysPermission> selectSysPermissionByAll(String environmentType) {
+	public List<SysPermission> selectSysPermissionByAll(String environmentType) {
 		return sysPermissionDao.selectSysPermissionByAll(environmentType,CommonConstant.MENU_TYPE_2);
 	}
 

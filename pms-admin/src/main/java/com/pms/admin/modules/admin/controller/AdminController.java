@@ -119,14 +119,14 @@ public class AdminController {
 	 * @param allList
 	 */
 	private void getAllAuthJsonArray(JSONArray jsonArray,List<SysPermission> allList) {
-		JSONObject json = null;
+		Map<String, Object> json = null;
 		for (SysPermission permission : allList) {
-			json = new JSONObject();
-			json.append("action", permission.getPerms());
-			json.append("status", permission.getStatus());
+			json = new HashMap<>();
+			json.put("action", permission.getPerms());
+			json.put("status", permission.getStatus());
 			//1显示2禁用
-			json.append("type", permission.getPermsType());
-			json.append("describe", permission.getName());
+			json.put("type", permission.getPermsType());
+			json.put("describe", permission.getName());
 			jsonArray.add(json);
 		}
 	}
@@ -141,15 +141,29 @@ public class AdminController {
 			if(permission.getMenuType()==null) {
 				continue;
 			}
-			JSONObject json = null;
+			Map<String, Object> json = null;
 			if(permission.getMenuType().equals(CommonConstant.MENU_TYPE_2) &&CommonConstant.STATUS_1.equals(permission.getStatus())) {
-				json = new JSONObject();
-				json.append("action", permission.getPerms());
-				json.append("type", permission.getPermsType());
-				json.append("describe", permission.getName());
+				json = new HashMap<>();
+				json.put("action", permission.getPerms());
+				json.put("type", permission.getPermsType());
+				json.put("describe", permission.getName());
 				jsonArray.add(json);
 			}
 		}
 	}
+	
+	/**
+     * 获取access_token
+     * @return
+     */
+    @GetMapping("/test")
+    @ApiOperation(value = "test接口", notes = "test")
+    @ApiImplicitParams({
+        @ApiImplicitParam(paramType = "query", name = "code", value = "授权码", dataTypeClass = Long.class,  required = true)
+    })
+    public Result<?> Test(){
+    	
+        return Result.success("授权认证通过");
+    }
     
 }

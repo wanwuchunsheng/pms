@@ -88,9 +88,7 @@ public class DefaultSecurityConfig {
             SysUserInfo admin = umsAdminService.getAdminByUsername(username);
             if (admin != null) {
             	List<SysPermission> permissionList = umsAdminService.getPermissionList(admin.getId());
-            	List<GrantedAuthority> authorities = permissionList.stream().filter(permission -> permission.getPerms()!=null)
-        				.map(permission ->new SimpleGrantedAuthority(permission.getPerms())).collect(Collectors.toList());
-                AdminUserDetails adminUserDetails = new AdminUserDetails(admin,authorities,null);
+                AdminUserDetails adminUserDetails = new AdminUserDetails(admin,permissionList,null);
                 //redis保存信息
                 globalCache.set(admin.getUserCode(), adminUserDetails);
                 //封装返回

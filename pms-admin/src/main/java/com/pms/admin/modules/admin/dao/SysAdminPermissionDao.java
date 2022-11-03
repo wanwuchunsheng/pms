@@ -13,7 +13,7 @@ import com.pms.admin.modules.admin.entity.SysPermission;
  * @author WCH
  */
 @Repository
-public interface SysPermissionDao extends BaseMapper<SysPermission> {
+public interface SysAdminPermissionDao extends BaseMapper<SysPermission> {
 
 	/**
 	 * 查询用户所有权限的资源

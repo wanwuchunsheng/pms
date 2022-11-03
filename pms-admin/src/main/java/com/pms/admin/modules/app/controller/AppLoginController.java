@@ -113,7 +113,7 @@ public class AppLoginController {
         adminUser.getPmsUserInfo().setPwd(null);
         adminUser.setDingtalkAccessToken(null);
         adminUser.setRoleList(null);
-        adminUser.setPerList(null);
+        adminUser.setPermsList(null);
         return Result.success(adminUser);
 		 
 	}
