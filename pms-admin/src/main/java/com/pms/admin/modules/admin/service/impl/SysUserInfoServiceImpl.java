@@ -8,16 +8,17 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dingtalk.api.response.OapiV2UserGetResponse.UserGetResponse;
-import com.pms.admin.modules.admin.dao.SysResouceDao;
+import com.pms.admin.config.constant.CommonConstant;
+import com.pms.admin.modules.admin.dao.SysPermissionDao;
 import com.pms.admin.modules.admin.dao.SysRoleDao;
 import com.pms.admin.modules.admin.dao.SysUserInfoDao;
 import com.pms.admin.modules.admin.dao.SysUserRoleDao;
+import com.pms.admin.modules.admin.entity.SysPermission;
 import com.pms.admin.modules.admin.entity.SysRole;
 import com.pms.admin.modules.admin.entity.SysUserRole;
 import com.pms.admin.modules.admin.service.ISysUserInfoService;
 import com.pms.common.constant.Constants;
 import com.pms.common.pojo.Result;
-import com.pms.common.pojo.SysResouce;
 import com.pms.common.pojo.SysUserInfo;
 
 import cn.hutool.core.convert.Convert;
@@ -33,7 +34,7 @@ public class SysUserInfoServiceImpl implements ISysUserInfoService{
 	private SysUserInfoDao sysUserInfoDao;
 	
 	@Autowired
-	private SysResouceDao sysResouceDao;
+	private SysPermissionDao sysPermissionDao;
 	
 	@Autowired
 	private SysRoleDao sysRoleDao;
@@ -78,8 +79,8 @@ public class SysUserInfoServiceImpl implements ISysUserInfoService{
 	 * 
 	 * */
 	@Override
-	public List<SysResouce> getPermissionList(Long userId) {
-		return sysResouceDao.getPermissionList(userId);
+	public List<com.pms.common.pojo.SysPermission> getPermissionList(Long userId,String propertyType) {
+		return sysPermissionDao.getPermissionList(userId, propertyType);
 	}
 
 	/**
@@ -147,7 +148,18 @@ public class SysUserInfoServiceImpl implements ISysUserInfoService{
 		queryWrapper.eq("id", userId);
 		return Result.success(sysUserInfoDao.selectOne(queryWrapper));
 	}
-	
+
+	/**
+	 * 查询所有权限的资源
+	 * @author WCH
+	 * @datetime 2022-10-9 13:42:21
+	 * 
+	 * */
+	@Override
+	public List<com.pms.common.pojo.SysPermission> selectSysPermissionByAll(String environmentType) {
+		return sysPermissionDao.selectSysPermissionByAll(environmentType,CommonConstant.MENU_TYPE_2);
+	}
+
 
 	
 	

@@ -7,6 +7,8 @@ public interface IAdminService {
 	Result<?> getAuthAccessToken();
 
 	Result<?> revokeAccessToken(String accessToken);
+
+	Result<?> getDingtalkOAuth(String authCode);
 	
 	
 }

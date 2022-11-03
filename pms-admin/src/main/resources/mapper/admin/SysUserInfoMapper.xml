@@ -4,7 +4,17 @@
 
     <!-- 批量插入气象站数据 -->
 	<update id="updateSysUserInfoByUserId">
-	    update sys_user_info set dingtalk_user_id=#{userId},dingtalk_union_id=#{unionId},dingtalk_dept_id=#{deptIds} where mobile = #{mobile}
+	    update sys_user_info set 
+	    <if test="userId != null">
+			 dingtalk_user_id=#{userId},
+		</if>
+	    <if test="deptIds != null">
+			 dingtalk_dept_id=#{deptIds},
+		</if>
+		<if test="unionId != null">
+			 dingtalk_union_id=#{unionId}
+		</if>
+	    where mobile = #{mobile}
   	</update>
   	
 </mapper>

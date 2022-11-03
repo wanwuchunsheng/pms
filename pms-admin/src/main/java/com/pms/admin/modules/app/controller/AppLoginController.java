@@ -2,22 +2,25 @@ package com.pms.admin.modules.app.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dingtalk.api.response.OapiV2UserGetResponse.UserGetResponse;
+import com.pms.common.pojo.SysPermission;
 import com.pms.admin.modules.admin.service.IAdminService;
 import com.pms.admin.modules.admin.service.ISysUserInfoService;
 import com.pms.admin.modules.app.service.IAppLoginService;
 import com.pms.common.constant.Constants;
 import com.pms.common.pojo.Result;
-import com.pms.common.pojo.SysResouce;
 import com.pms.common.pojo.SysUserInfo;
 import com.pms.common.redis.IGlobalCache;
 import com.pms.security.pojo.AdminUserDetails;
@@ -26,6 +29,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -55,6 +59,7 @@ public class AppLoginController {
 	
 	@SuppressWarnings("unchecked")
 	@GetMapping(value = "/dingtalkCallback")
+	@ApiOperation(value = "微应用、小程序登录接口", notes = "微应用、小程序登录接口")
 	public Result<?> dingdingCallback(@NotBlank(message = "授权码不能为空") String code) {
 		//1、获取钉钉access_token
     	Result<?> resAccessToken = appLoginService.getDingtalkAccessToken();
@@ -69,7 +74,7 @@ public class AppLoginController {
         //3、根据userId获取用户信息
         Result<?> resUserInfo = appLoginService.getDingtalkUserInfo(Convert.toStr(resAccessToken.getData()),Convert.toStr(resUserId.getData()));
         if(resUserInfo.getCode() != 200) {
-    		return resUserId;
+    		return resUserInfo;
     	}
         //4、用户表补全钉钉信息
         UserGetResponse dingtalkUser = (UserGetResponse) resUserInfo.getData();
@@ -86,28 +91,29 @@ public class AppLoginController {
         	sysUserInfoService.saveRole(sui);
         }
         //6、查询用户：角色-资源
-        List<SysResouce> resList = sysUserInfoService.getPermissionList(sui.getId());
+        List<SysPermission> resList = sysUserInfoService.getPermissionList(sui.getId(),Constants.PROPERTYTYPE_APP);
         //7、查询用户所有角色
         List<com.pms.common.pojo.SysRole> roleList = sysUserInfoService.getRoleList(sui.getId());
         //8、获取本地授权服务器local_access_token
         Result<?> resLocalAccessToken = adminService.getAuthAccessToken();
         if(resLocalAccessToken.getCode()!=200) {
         	return resLocalAccessToken;
-        } 
+        }
         //9、封装redis存储对象
 		Map<String,Object> localMap = (Map<String, Object>) resLocalAccessToken.getData();
 		sui.setDingtalkDeptId(Convert.toStr(dingtalkUser.getDeptIdList()));
 		sui.setDingtalkUserId(dingtalkUser.getUserid());
 		sui.setDingtalkUnionId(dingtalkUser.getUnionid());
-		AdminUserDetails adminUser = new AdminUserDetails(sui,resList,roleList);
+		AdminUserDetails adminUser = new AdminUserDetails(sui, resList, roleList);
 		adminUser.setAccessToken(Convert.toStr(localMap.get("access_token")));
 		adminUser.setDingtalkAccessToken(Convert.toStr(resAccessToken.getData()));
         //10、存入redis
         globalCache.set(Constants.JUSTAUTH+adminUser.getAccessToken(), JSONUtil.parse(adminUser) , Constants.REDIS_TOKEN_TIMEOUT);
+        //隐藏信息
         adminUser.getPmsUserInfo().setPwd(null);
         adminUser.setDingtalkAccessToken(null);
-        adminUser.setResouceList(null);
         adminUser.setRoleList(null);
+        adminUser.setPerList(null);
         return Result.success(adminUser);
 		 
 	}

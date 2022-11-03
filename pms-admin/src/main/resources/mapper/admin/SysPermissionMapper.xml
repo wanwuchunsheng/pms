@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pms.admin.modules.admin.dao.SysPermissionDao">
+  	
+  	<!-- 用户id查询资源权限 -->
+	<select id="getPermissionList" resultType="com.pms.common.pojo.SysPermission">
+	    select 
+			DISTINCT 
+			a.id,
+			a.parent_id,
+			a.name,
+			a.url,
+			a.component,
+			a.is_route,
+			a.component_name,
+			a.redirect,
+			a.menu_type,
+			a.perms,
+			a.perms_type,
+			a.sort_no,
+			a.always_show,
+			a.icon,
+			a.is_leaf,
+			a.keep_alive,
+			a.hidden,
+			a.hide_tab,
+			a.description,
+			a.create_by,
+			a.create_time,
+			a.update_by,
+			a.update_time,
+			a.del_flag,
+			a.rule_flag,
+			a.status,
+			a.internal_or_external,
+			a.tenant_id,
+			a.environment_type
+		from sys_permission a, sys_role b, sys_role_permission c ,sys_user_role d
+		where a.id = c.permission_id and b.id = c.role_id and d.role_id = b.id
+		and a.del_flag = 0 
+		and d.user_id = #{userId} 
+		<if test="propertyType != null">
+			and a.environment_type = #{propertyType}
+		</if>
+		order by id,sort
+  	</select>
+  	
+  	
+  	<!-- 用户id查询资源权限 -->
+	<select id="selectSysPermissionByAll" resultType="com.pms.common.pojo.SysPermission">
+	    select 
+			a.id,
+			a.parent_id,
+			a.name,
+			a.url,
+			a.component,
+			a.is_route,
+			a.component_name,
+			a.redirect,
+			a.menu_type,
+			a.perms,
+			a.perms_type,
+			a.sort_no,
+			a.always_show,
+			a.icon,
+			a.is_leaf,
+			a.keep_alive,
+			a.hidden,
+			a.hide_tab,
+			a.description,
+			a.create_by,
+			a.create_time,
+			a.update_by,
+			a.update_time,
+			a.del_flag,
+			a.rule_flag,
+			a.status,
+			a.internal_or_external,
+			a.tenant_id,
+			a.environment_type
+		from sys_permission a
+		where 1=1
+		and a.del_flag = 0 
+		and a.menu_type= #{menuType}
+		<if test="environmentType != null">
+			and a.environment_type = #{environmentType}
+		</if>
+		order by id
+  	</select>
+  
+  
+</mapper>
+

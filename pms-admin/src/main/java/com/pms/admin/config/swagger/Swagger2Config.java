@@ -44,7 +44,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
-@Profile({"dev", "test", "prod"})
+@Profile({"dev", "test"})
 public class Swagger2Config {
 
 	@Bean
@@ -62,7 +62,7 @@ public class Swagger2Config {
     }
 	
 	private ApiInfo apiInfo() {
-        Contact contact = new Contact("dsblog接口文档", "http://localhost:9001/pms-admin/doc.html", "v_wanchanghuang@163.com");
+        Contact contact = new Contact("天利项目（pms-portal）地址>>>", "http://192.168.1.151:9100/pms-admin/swagger-ui/index.html", null);
         return new ApiInfoBuilder()
                 .title("管理中心")
                 .description("pms-admin")

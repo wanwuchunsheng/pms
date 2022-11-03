@@ -10,4 +10,8 @@ public interface IDingTalkService {
 
 	Result<?> getDingtalkUserInfo(String accessToken,String userid);
 
+	Result<?> getDingtalkOAuthUnionId(String accessToken);
+
+	Result<?> getDingtalkOAuthUserInfo(String accessToken, String unionId);
+
 }

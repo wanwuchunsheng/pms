@@ -4,7 +4,6 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.interfaces.RSAPublicKey;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,25 +11,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
-import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
-import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.pms.auth.config.redis.IGlobalCache;
 import com.pms.auth.modules.service.AdminUserDetails;
 import com.pms.auth.modules.service.UmsAdminService;
-import com.pms.common.pojo.SysResouce;
+import com.pms.common.pojo.SysPermission;
 import com.pms.common.pojo.SysUserInfo;
 
 import lombok.SneakyThrows;
@@ -92,8 +87,10 @@ public class DefaultSecurityConfig {
         return username -> {
             SysUserInfo admin = umsAdminService.getAdminByUsername(username);
             if (admin != null) {
-            	List<SysResouce> permissionList = umsAdminService.getPermissionList(admin.getId());
-                AdminUserDetails adminUserDetails = new AdminUserDetails(admin,permissionList);
+            	List<SysPermission> permissionList = umsAdminService.getPermissionList(admin.getId());
+            	List<GrantedAuthority> authorities = permissionList.stream().filter(permission -> permission.getPerms()!=null)
+        				.map(permission ->new SimpleGrantedAuthority(permission.getPerms())).collect(Collectors.toList());
+                AdminUserDetails adminUserDetails = new AdminUserDetails(admin,authorities,null);
                 //redis保存信息
                 globalCache.set(admin.getUserCode(), adminUserDetails);
                 //封装返回

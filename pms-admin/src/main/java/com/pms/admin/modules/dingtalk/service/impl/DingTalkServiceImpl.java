@@ -3,6 +3,12 @@ package com.pms.admin.modules.dingtalk.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.aliyun.dingtalkcontact_1_0.Client;
+import com.aliyun.dingtalkcontact_1_0.models.GetUserHeaders;
+import com.aliyun.dingtalkcontact_1_0.models.GetUserResponse;
+import com.aliyun.tea.TeaException;
+import com.aliyun.teaopenapi.models.Config;
+import com.aliyun.teautil.models.RuntimeOptions;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiGettokenRequest;
@@ -17,6 +23,7 @@ import com.pms.admin.config.dingtalk.DingTalkConfig;
 import com.pms.admin.modules.dingtalk.service.IDingTalkService;
 import com.pms.common.pojo.Result;
 
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -113,6 +120,82 @@ public class DingTalkServiceImpl implements IDingTalkService{
 			log.error("获取钉钉用户详细信息失败,access_token:{}-userid:{}-异常信息：{}",accessToken,userid,e);
 		}
 		return Result.failed("获取钉钉登录用户信息异常");
+	}
+
+	/**
+     * 说明：获取钉钉用户详细信息
+     *    钉钉oauth2.0 方式
+     * @author WCH
+     * @param userid
+     * @datetime 2022-9-26 15:31:15
+    */
+	@Override
+	public Result<?> getDingtalkOAuthUnionId(String accessToken) {
+        try {
+        	//1获取unionId
+        	Config config = new Config();
+	        config.protocol = "https";
+	        config.regionId = "central";
+	        Client client = new Client(config);
+	        GetUserHeaders getUserHeaders = new GetUserHeaders();
+	        getUserHeaders.xAcsDingtalkAccessToken = accessToken;
+        	GetUserResponse res =   client.getUserWithOptions("me", getUserHeaders, new RuntimeOptions());
+        	log.info("___oauth2.0方式获取用户信息：{}",JSONUtil.parse(res));
+        	return Result.success(res.getBody().getUnionId());
+        	/***
+        	//2获取免登陆token
+        	DingTalkClient clientDingTalkClient = new DefaultDingTalkClient(dingtalkConfig.getGetTokenUrl());
+	        OapiGettokenRequest request = new OapiGettokenRequest();
+	        request.setAppkey(dingtalkConfig.getAppId());
+	        request.setAppsecret(dingtalkConfig.getAppSecret());
+	        request.setHttpMethod("GET");
+	        OapiGettokenResponse response =clientDingTalkClient.execute(request);
+	        log.info("2___snsToken={}",JSONUtil.parse(response));
+	        //3获取userId
+	        DingTalkClient clientDingTalkClient2 = new DefaultDingTalkClient(dingtalkConfig.getGetUnionIdUrl());
+            OapiUserGetbyunionidRequest reqGetbyunionidRequest = new OapiUserGetbyunionidRequest();
+            reqGetbyunionidRequest.setUnionid(res.getBody().getUnionId());
+            OapiUserGetbyunionidResponse oapiUserGetbyunionidResponse = clientDingTalkClient2.execute(reqGetbyunionidRequest, response.getAccessToken());
+            if (oapiUserGetbyunionidResponse.getErrcode() != 0) {
+            	//异常返回提醒
+                return Result.failed(oapiUserGetbyunionidResponse.getErrmsg());
+            }
+            log.info("3___userId={}",JSONUtil.parse(oapiUserGetbyunionidResponse.getResult().getUserid()));
+            //4根据userId获取用户信息
+            return getDingtalkUserInfo( response.getAccessToken(),oapiUserGetbyunionidResponse.getResult().getUserid());
+            */
+        } catch (Exception e) {
+           log.error("钉钉oauth2.0方式获取用户信息失败", e.getMessage());
+        }    
+		return Result.failed("钉钉oauth2.0方式获取用户信息失败");
+	}
+
+	
+	/**
+     * 说明：根据unionId获取用户详细信息
+     * @author WCH
+     * @param userid
+     * @datetime 2022-9-26 15:31:15
+    */
+	@Override
+	public Result<?> getDingtalkOAuthUserInfo(String accessToken, String unionId) {
+        try {
+	        //获取userId
+	        DingTalkClient clientDingTalkClient2 = new DefaultDingTalkClient(dingtalkConfig.getGetUnionIdUrl());
+            OapiUserGetbyunionidRequest reqGetbyunionidRequest = new OapiUserGetbyunionidRequest();
+            reqGetbyunionidRequest.setUnionid(unionId);
+            OapiUserGetbyunionidResponse oapiUserGetbyunionidResponse = clientDingTalkClient2.execute(reqGetbyunionidRequest, accessToken);
+            if (oapiUserGetbyunionidResponse.getErrcode() != 0) {
+            	//异常返回提醒
+                return Result.failed(oapiUserGetbyunionidResponse.getErrmsg());
+            }
+            log.info("___根据unionId获取用户详细:{}",JSONUtil.parse(oapiUserGetbyunionidResponse.getResult()));
+            //4根据userId获取用户信息
+            return getDingtalkUserInfo( accessToken,oapiUserGetbyunionidResponse.getResult().getUserid());
+		} catch (Exception e) {
+			log.error("根据unionId获取用户详细失败",e.getMessage());
+		}
+		return Result.success("根据unionId获取用户详细失败");
 	}
 
 }
