@@ -82,18 +82,18 @@ public class SysPermission implements Serializable {
 	/**
 	 * 是否叶子节点: 1:是  0:不是
 	 */
-	private boolean leaf;
+	private Integer isLeaf;
 	
 	/**
 	 * 是否路由菜单: 0:不是  1:是（默认值1）
 	 */
-	private boolean route;
+	private Integer isRoute;
 
 
 	/**
 	 * 是否缓存页面: 0:不是  1:是（默认值1）
 	 */
-	private boolean keepAlive;
+	private Integer keepAlive;
 
 	/**
 	 * 描述
@@ -118,12 +118,12 @@ public class SysPermission implements Serializable {
 	/**
 	 * 是否隐藏路由菜单: 0否,1是（默认值0）
 	 */
-	private boolean hidden;
+	private Integer hidden;
 
 	/**
 	 * 是否隐藏Tab: 0否,1是（默认值0）
 	 */
-	private boolean hideTab;
+	private Integer hideTab;
 
 	/**
 	 * 创建时间
@@ -141,14 +141,14 @@ public class SysPermission implements Serializable {
 	private Date updateTime;
 	
 	/**按钮权限状态(0无效1有效)*/
-	private java.lang.String status;
+	private Integer status;
 	
 	/**alwaysShow*/
-    private boolean alwaysShow;
+    private Integer alwaysShow;
 
 	/*update_begin author:wuxianquan date:20190908 for:实体增加字段 */
     /** 外链菜单打开方式 0/内部打开 1/外部打开 */
-    private boolean internalOrExternal;
+    private Integer internalOrExternal;
 	/*update_end author:wuxianquan date:20190908 for:实体增加字段 */
 
    
