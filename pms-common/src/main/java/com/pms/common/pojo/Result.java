@@ -27,8 +27,6 @@ public class Result<T> implements Serializable{
     
     private T data;
 
-    private Long count;
-
     protected Result() {
     	
     }
@@ -44,36 +42,6 @@ public class Result<T> implements Serializable{
         this.message = message;
     }
     
-    public Result(Integer code,Long total,T data) {
-        this.data = data;
-        this.code = code;
-        this.count = total;
-    }
-    
-    public Result(Integer code,Long total,T data, String message) {
-        this.data = data;
-        this.code = code;
-        this.count = total;
-        this.message = message;
-    }
-    
-    /**
-     * 返回查询总数量跟自定义数据
-     * @param data
-     * @return
-     */
-    public static<T> Result<T> data(Integer code,Long total, T data) {
-        return new Result<T>(code, total ,data);
-    }
-    
-    /**
-     * 返回查询总数量跟自定义数据
-     * @param data
-     * @return
-     */
-    public static<T> Result<T> data(Integer code,Long total, T data,String msg) {
-        return new Result<T>(code,total,data,msg);
-    }
     
     /**
      * 成功返回结果
