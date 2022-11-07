@@ -56,6 +56,7 @@ public class DynamicSecurityAuthManager {
                 //5、白名单过滤
                 for (String url : ignoreUrlsConfig.getPerms()) {
                 	if(matcher.match(url, path)) {
+                		request.setAttribute("userInfo", JSONUtil.parse(user));
                         return true;
                 	}
                 }

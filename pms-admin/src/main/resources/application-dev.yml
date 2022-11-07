@@ -90,11 +90,9 @@ secure:
       - /dingtalk/dingtalkCallback
       - /dingtalk/dingtalkAuth
       - /app/dingtalkCallback
-      - /admin/getPermission
     perms: #权限路径白名单
-      - /admin/**
-      - /dingtalk/**
-      - /app/**
+      - /admin/test
+      - /admin/getPermission
       
              
 #security jwt（校验jwt签名）
