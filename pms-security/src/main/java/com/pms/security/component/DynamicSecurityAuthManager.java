@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.AntPathMatcher;
 
 import com.pms.common.constant.Constants;
+import com.pms.security.config.common.IgnoreUrlsConfig;
 import com.pms.security.pojo.AdminUserDetails;
 import com.pms.security.service.DynamicSecurityService;
 
@@ -25,6 +26,9 @@ import lombok.extern.slf4j.Slf4j;
  * */
 @Slf4j
 public class DynamicSecurityAuthManager {
+	
+	@Autowired
+	private IgnoreUrlsConfig ignoreUrlsConfig;
 	
 	@Autowired
     private DynamicSecurityService dynamicSecurityService;
@@ -46,6 +50,12 @@ public class DynamicSecurityAuthManager {
                 for (GrantedAuthority authority : iterator) {
                 	if(matcher.match(authority.getAuthority(), path)) {
                 		request.setAttribute("userInfo", JSONUtil.parse(user));
+                        return true;
+                	}
+                }
+                //5、白名单过滤
+                for (String url : ignoreUrlsConfig.getPerms()) {
+                	if(matcher.match(url, path)) {
                         return true;
                 	}
                 }

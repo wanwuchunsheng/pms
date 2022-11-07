@@ -17,5 +17,7 @@ import java.util.List;
 public class IgnoreUrlsConfig {
 
     private List<String> urls = new ArrayList<>();
+    
+    private List<String> perms = new ArrayList<>();
 
 }
