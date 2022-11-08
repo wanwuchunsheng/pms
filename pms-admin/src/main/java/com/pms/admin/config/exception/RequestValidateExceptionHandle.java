@@ -1,4 +1,4 @@
-package com.pms.common.exception;
+package com.pms.admin.config.exception;
 
 
 import java.util.stream.Collectors;

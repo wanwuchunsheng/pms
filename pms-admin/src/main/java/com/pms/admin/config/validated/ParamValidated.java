@@ -1,4 +1,4 @@
-package com.pms.common.validated;
+package com.pms.admin.config.validated;
 
 import javax.validation.groups.Default;
 /**

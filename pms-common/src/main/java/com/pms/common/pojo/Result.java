@@ -12,8 +12,8 @@ import lombok.Setter;
  * 通用返回对象
  * Created by macro on 2019/4/19.
  */
-@Setter
 @Getter
+@Setter
 public class Result<T> implements Serializable{
 	
     /**

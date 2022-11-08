@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.tl</groupId>
     <artifactId>pms</artifactId>
-    <version>2.0.4.RELEASE</version>
+    <version>2.0.5.RELEASE</version>
   </parent>
   <groupId>com.pms.admin</groupId>
   <artifactId>pms-admin</artifactId>
@@ -92,6 +92,11 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
+        </dependency>
+        <!-- 接口参数检验  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <!--java版本太高  向下兼容的包-->
 	    <dependency>
