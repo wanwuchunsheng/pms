@@ -1,7 +1,5 @@
 package com.pms.security.service.impl;
 
-import javax.security.sasl.AuthenticationException;
-
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 

@@ -5,6 +5,7 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.AntPathMatcher;
@@ -36,35 +37,36 @@ public class DynamicSecurityAuthManager {
 	private static AntPathMatcher matcher = new AntPathMatcher();
 	
     public boolean canAccess(HttpServletRequest request, Authentication authentication) {
-    	try {
-    		//1、获取access_token
-            String authorization = request.getHeader(Constants.AUTHORIZATION);
-            if(ObjectUtil.isNotEmpty(authorization)) {
-            	String accessToken = authorization.substring(Constants.BEARER.length());
-            	//2、获取登录用户可访问资源权限
-                AdminUserDetails user = dynamicSecurityService.loadDataSource(accessToken);
-                Collection<? extends GrantedAuthority> iterator = user.getAuthorities();
-                //3、获取当前访问的路径
-                String path = request.getServletPath();
-                //4、判断当前路径和资源权限路径
-                for (GrantedAuthority authority : iterator) {
-                	if(matcher.match(authority.getAuthority(), path)) {
-                		request.setAttribute("userInfo", JSONUtil.parse(user));
-                        return true;
-                	}
-                }
-                //5、白名单过滤
-                for (String url : ignoreUrlsConfig.getPerms()) {
-                	if(matcher.match(url, path)) {
-                		request.setAttribute("userInfo", JSONUtil.parse(user));
-                        return true;
-                	}
-                }
+		//1、获取access_token
+        String authorization = request.getHeader(Constants.AUTHORIZATION);
+        if(ObjectUtil.isEmpty(authorization)) {
+        	throw new AuthorizationServiceException("token为空");
+        }
+        String accessToken = authorization.substring(Constants.BEARER.length());
+    	//2、获取登录用户可访问资源权限
+        AdminUserDetails user = dynamicSecurityService.loadDataSource(accessToken);
+        try {
+        	Collection<? extends GrantedAuthority> iterator = user.getAuthorities();
+            //3、获取当前访问的路径
+            String path = request.getServletPath();
+            //4、判断当前路径和资源权限路径
+            for (GrantedAuthority authority : iterator) {
+            	if(matcher.match(authority.getAuthority(), path)) {
+            		request.setAttribute("userInfo", JSONUtil.parse(user));
+                    return true;
+            	}
             }
-		} catch (Exception e) {
+            //5、白名单过滤
+            for (String url : ignoreUrlsConfig.getPerms()) {
+            	if(matcher.match(url, path)) {
+            		request.setAttribute("userInfo", JSONUtil.parse(user));
+                    return true;
+            	}
+            }
+        } catch (Exception e) {
 			log.error("ERROR:无权访问 url={}，消息：{}",request.getRequestURL(),e.getMessage());
 		}
-		return false;
+        return false;
 		
     }
 }
