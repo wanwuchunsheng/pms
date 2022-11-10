@@ -11,6 +11,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 
 import com.pms.common.pojo.Result;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.http.HttpStatus;
 import cn.hutool.json.JSONUtil;
 
@@ -27,7 +28,11 @@ public class RestfulAccessDeniedHandler implements AccessDeniedHandler{
         response.setHeader("Cache-Control","no-cache");
     	response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        response.getWriter().println(JSONUtil.parse(Result.failed(HttpStatus.HTTP_FORBIDDEN, "无访问权限")));
+        if(Convert.toStr(HttpStatus.HTTP_UNAUTHORIZED).equals(e.getMessage())) {
+        	response.getWriter().println(JSONUtil.parse(Result.failed(HttpStatus.HTTP_UNAUTHORIZED, "身份验证不通过"))); 
+        }else {
+        	response.getWriter().println(JSONUtil.parse(Result.failed(HttpStatus.HTTP_FORBIDDEN, "无访问权限")));
+        }
         response.getWriter().flush();
     }
     
