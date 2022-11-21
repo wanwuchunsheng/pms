@@ -29,6 +29,7 @@ public class AdminUserDetails implements UserDetails {
 	private SysUserInfo pmsUserInfo;
 	private List<SysPermission> permsList;
     private List<SysRole> roleList;
+    private String environmentType;
   
     public AdminUserDetails() {
     	
