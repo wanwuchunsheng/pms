@@ -21,4 +21,7 @@ public class Constants {
     public static final String PROPERTYTYPE_WEB = "1";
     public static final String PROPERTYTYPE_APP = "2";
     
+    public static final String AUTH_CLIENT = "my_client";
+    public static final String AUTH_SECRET = "123456";
+    
 }

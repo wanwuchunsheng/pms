@@ -33,6 +33,7 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.pms.common.constant.Constants;
 
 import cn.hutool.core.lang.UUID;
 import lombok.SneakyThrows;
@@ -102,7 +103,7 @@ public class AuthorizationServerConfiguration {
         // 1、操作数据库对象,检查当前客户端是否已注册
         JdbcRegisteredClientRepository registeredClientRepository = new JdbcRegisteredClientRepository(jdbcTemplate);
         // 客户端ID
-        String clientId_1 = "my_client";
+        String clientId_1 = Constants.AUTH_CLIENT;
         // 查询客户端是否存在
         RegisteredClient registeredClient_1 = registeredClientRepository.findByClientId(clientId_1);
 
@@ -143,7 +144,7 @@ public class AuthorizationServerConfiguration {
                 .withId(UUID.randomUUID().toString())
                 //.withId(id)
                 .clientId(clientId)
-                .clientSecret(this.passwordEncoder.encode("123456"))
+                .clientSecret(this.passwordEncoder.encode(Constants.AUTH_SECRET))
                 // 客户端名称：可省略
                 .clientName("授权服务中心")
                 // 授权方法
